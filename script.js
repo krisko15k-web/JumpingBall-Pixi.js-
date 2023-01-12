@@ -23,7 +23,7 @@ ball.height = 100
 // Ball Position
 ball.anchor.set(0.5)
 ball.x = app.screen.width / 2
-ball.y = 100
+ball.y = 500
 
 // Makes the Ball interactive
 ball.interactive = true
@@ -38,16 +38,22 @@ let colors = [
     '#00ffff',
     '#0000ff'
 ]
-// Random Color
-let randColor = colors[Math.floor(Math.random() * colors.length)]
-
-// Makes the Ball Fall
+// Makes the Ball Move
 app.ticker.add(() => {
-    ball.y += 5
+    ball.y -= 5
     ball.angle += 2
+
+    if (ball.y < 100) {
+        ball.y = 100
+        app.ticker.add(() => {
+            ball.y += 10
+        })
+    }
     if (ball.y >= app.screen.height) {
         counter.textContent = 0
-        document.body.style.backgroundColor = randColor
+        score = 0
+        document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]
+        ball.y = 100
     }
 })
 
@@ -56,14 +62,7 @@ function onClick() {
     score += 1
     counter.textContent = score
 
-    // Creates Gravity
     app.ticker.add(() => {
         ball.y -= 10
-        if (ball.y < 100) {
-            ball.y = 100
-            app.ticker.add(() => {
-                ball.y += 10
-            })
-        }
     })
 }
