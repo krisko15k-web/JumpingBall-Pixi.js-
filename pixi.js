@@ -234,113 +234,113 @@ var PIXI = (function (exports) {
   var otherChrome = /\b(CriOS|Chrome)(?:.+)Mobile/i;
   var otherFirefox = /Mobile(?:.+)Firefox\b/i;
   var isAppleTabletOnIos13 = function (navigator) {
-      return (typeof navigator !== 'undefined' &&
-          navigator.platform === 'MacIntel' &&
-          typeof navigator.maxTouchPoints === 'number' &&
-          navigator.maxTouchPoints > 1 &&
-          typeof MSStream === 'undefined');
+    return (typeof navigator !== 'undefined' &&
+      navigator.platform === 'MacIntel' &&
+      typeof navigator.maxTouchPoints === 'number' &&
+      navigator.maxTouchPoints > 1 &&
+      typeof MSStream === 'undefined');
   };
   function createMatch(userAgent) {
-      return function (regex) { return regex.test(userAgent); };
+    return function (regex) { return regex.test(userAgent); };
   }
   function isMobile$1(param) {
-      var nav = {
-          userAgent: '',
-          platform: '',
-          maxTouchPoints: 0
+    var nav = {
+      userAgent: '',
+      platform: '',
+      maxTouchPoints: 0
+    };
+    if (!param && typeof navigator !== 'undefined') {
+      nav = {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        maxTouchPoints: navigator.maxTouchPoints || 0
       };
-      if (!param && typeof navigator !== 'undefined') {
-          nav = {
-              userAgent: navigator.userAgent,
-              platform: navigator.platform,
-              maxTouchPoints: navigator.maxTouchPoints || 0
-          };
-      }
-      else if (typeof param === 'string') {
-          nav.userAgent = param;
-      }
-      else if (param && param.userAgent) {
-          nav = {
-              userAgent: param.userAgent,
-              platform: param.platform,
-              maxTouchPoints: param.maxTouchPoints || 0
-          };
-      }
-      var userAgent = nav.userAgent;
-      var tmp = userAgent.split('[FBAN');
-      if (typeof tmp[1] !== 'undefined') {
-          userAgent = tmp[0];
-      }
-      tmp = userAgent.split('Twitter');
-      if (typeof tmp[1] !== 'undefined') {
-          userAgent = tmp[0];
-      }
-      var match = createMatch(userAgent);
-      var result = {
-          apple: {
-              phone: match(appleIphone) && !match(windowsPhone),
-              ipod: match(appleIpod),
-              tablet: !match(appleIphone) &&
-                  (match(appleTablet) || isAppleTabletOnIos13(nav)) &&
-                  !match(windowsPhone),
-              universal: match(appleUniversal),
-              device: (match(appleIphone) ||
-                  match(appleIpod) ||
-                  match(appleTablet) ||
-                  match(appleUniversal) ||
-                  isAppleTabletOnIos13(nav)) &&
-                  !match(windowsPhone)
-          },
-          amazon: {
-              phone: match(amazonPhone),
-              tablet: !match(amazonPhone) && match(amazonTablet),
-              device: match(amazonPhone) || match(amazonTablet)
-          },
-          android: {
-              phone: (!match(windowsPhone) && match(amazonPhone)) ||
-                  (!match(windowsPhone) && match(androidPhone)),
-              tablet: !match(windowsPhone) &&
-                  !match(amazonPhone) &&
-                  !match(androidPhone) &&
-                  (match(amazonTablet) || match(androidTablet)),
-              device: (!match(windowsPhone) &&
-                  (match(amazonPhone) ||
-                      match(amazonTablet) ||
-                      match(androidPhone) ||
-                      match(androidTablet))) ||
-                  match(/\bokhttp\b/i)
-          },
-          windows: {
-              phone: match(windowsPhone),
-              tablet: match(windowsTablet),
-              device: match(windowsPhone) || match(windowsTablet)
-          },
-          other: {
-              blackberry: match(otherBlackBerry),
-              blackberry10: match(otherBlackBerry10),
-              opera: match(otherOpera),
-              firefox: match(otherFirefox),
-              chrome: match(otherChrome),
-              device: match(otherBlackBerry) ||
-                  match(otherBlackBerry10) ||
-                  match(otherOpera) ||
-                  match(otherFirefox) ||
-                  match(otherChrome)
-          },
-          any: false,
-          phone: false,
-          tablet: false
+    }
+    else if (typeof param === 'string') {
+      nav.userAgent = param;
+    }
+    else if (param && param.userAgent) {
+      nav = {
+        userAgent: param.userAgent,
+        platform: param.platform,
+        maxTouchPoints: param.maxTouchPoints || 0
       };
-      result.any =
-          result.apple.device ||
-              result.android.device ||
-              result.windows.device ||
-              result.other.device;
-      result.phone =
-          result.apple.phone || result.android.phone || result.windows.phone;
-      result.tablet =
-          result.apple.tablet || result.android.tablet || result.windows.tablet;
-      return result;
+    }
+    var userAgent = nav.userAgent;
+    var tmp = userAgent.split('[FBAN');
+    if (typeof tmp[1] !== 'undefined') {
+      userAgent = tmp[0];
+    }
+    tmp = userAgent.split('Twitter');
+    if (typeof tmp[1] !== 'undefined') {
+      userAgent = tmp[0];
+    }
+    var match = createMatch(userAgent);
+    var result = {
+      apple: {
+        phone: match(appleIphone) && !match(windowsPhone),
+        ipod: match(appleIpod),
+        tablet: !match(appleIphone) &&
+          (match(appleTablet) || isAppleTabletOnIos13(nav)) &&
+          !match(windowsPhone),
+        universal: match(appleUniversal),
+        device: (match(appleIphone) ||
+          match(appleIpod) ||
+          match(appleTablet) ||
+          match(appleUniversal) ||
+          isAppleTabletOnIos13(nav)) &&
+          !match(windowsPhone)
+      },
+      amazon: {
+        phone: match(amazonPhone),
+        tablet: !match(amazonPhone) && match(amazonTablet),
+        device: match(amazonPhone) || match(amazonTablet)
+      },
+      android: {
+        phone: (!match(windowsPhone) && match(amazonPhone)) ||
+          (!match(windowsPhone) && match(androidPhone)),
+        tablet: !match(windowsPhone) &&
+          !match(amazonPhone) &&
+          !match(androidPhone) &&
+          (match(amazonTablet) || match(androidTablet)),
+        device: (!match(windowsPhone) &&
+          (match(amazonPhone) ||
+            match(amazonTablet) ||
+            match(androidPhone) ||
+            match(androidTablet))) ||
+          match(/\bokhttp\b/i)
+      },
+      windows: {
+        phone: match(windowsPhone),
+        tablet: match(windowsTablet),
+        device: match(windowsPhone) || match(windowsTablet)
+      },
+      other: {
+        blackberry: match(otherBlackBerry),
+        blackberry10: match(otherBlackBerry10),
+        opera: match(otherOpera),
+        firefox: match(otherFirefox),
+        chrome: match(otherChrome),
+        device: match(otherBlackBerry) ||
+          match(otherBlackBerry10) ||
+          match(otherOpera) ||
+          match(otherFirefox) ||
+          match(otherChrome)
+      },
+      any: false,
+      phone: false,
+      tablet: false
+    };
+    result.any =
+      result.apple.device ||
+      result.android.device ||
+      result.windows.device ||
+      result.other.device;
+    result.phone =
+      result.apple.phone || result.android.phone || result.windows.phone;
+    result.tablet =
+      result.apple.tablet || result.android.tablet || result.windows.tablet;
+    return result;
   }
 
   const isMobile = isMobile$1(globalThis.navigator);
@@ -1670,384 +1670,384 @@ var PIXI = (function (exports) {
 
   var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-  function getDefaultExportFromCjs (x) {
-  	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+  function getDefaultExportFromCjs(x) {
+    return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
   }
 
   function createCommonjsModule(fn, basedir, module) {
-  	return module = {
-  		path: basedir,
-  		exports: {},
-  		require: function (path, base) {
-  			return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
-  		}
-  	}, fn(module, module.exports), module.exports;
+    return module = {
+      path: basedir,
+      exports: {},
+      require: function (path, base) {
+        return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
+      }
+    }, fn(module, module.exports), module.exports;
   }
 
-  function getDefaultExportFromNamespaceIfPresent (n) {
-  	return n && Object.prototype.hasOwnProperty.call(n, 'default') ? n['default'] : n;
+  function getDefaultExportFromNamespaceIfPresent(n) {
+    return n && Object.prototype.hasOwnProperty.call(n, 'default') ? n['default'] : n;
   }
 
-  function getDefaultExportFromNamespaceIfNotNamed (n) {
-  	return n && Object.prototype.hasOwnProperty.call(n, 'default') && Object.keys(n).length === 1 ? n['default'] : n;
+  function getDefaultExportFromNamespaceIfNotNamed(n) {
+    return n && Object.prototype.hasOwnProperty.call(n, 'default') && Object.keys(n).length === 1 ? n['default'] : n;
   }
 
   function getAugmentedNamespace(n) {
-  	if (n.__esModule) return n;
-  	var a = Object.defineProperty({}, '__esModule', {value: true});
-  	Object.keys(n).forEach(function (k) {
-  		var d = Object.getOwnPropertyDescriptor(n, k);
-  		Object.defineProperty(a, k, d.get ? d : {
-  			enumerable: true,
-  			get: function () {
-  				return n[k];
-  			}
-  		});
-  	});
-  	return a;
+    if (n.__esModule) return n;
+    var a = Object.defineProperty({}, '__esModule', { value: true });
+    Object.keys(n).forEach(function (k) {
+      var d = Object.getOwnPropertyDescriptor(n, k);
+      Object.defineProperty(a, k, d.get ? d : {
+        enumerable: true,
+        get: function () {
+          return n[k];
+        }
+      });
+    });
+    return a;
   }
 
-  function commonjsRequire () {
-  	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+  function commonjsRequire() {
+    throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
   }
 
   var eventemitter3 = createCommonjsModule(function (module) {
-  'use strict';
+    'use strict';
 
-  var has = Object.prototype.hasOwnProperty
-    , prefix = '~';
+    var has = Object.prototype.hasOwnProperty
+      , prefix = '~';
 
-  /**
-   * Constructor to create a storage for our `EE` objects.
-   * An `Events` instance is a plain object whose properties are event names.
-   *
-   * @constructor
-   * @private
-   */
-  function Events() {}
-
-  //
-  // We try to not inherit from `Object.prototype`. In some engines creating an
-  // instance in this way is faster than calling `Object.create(null)` directly.
-  // If `Object.create(null)` is not supported we prefix the event names with a
-  // character to make sure that the built-in object properties are not
-  // overridden or used as an attack vector.
-  //
-  if (Object.create) {
-    Events.prototype = Object.create(null);
+    /**
+     * Constructor to create a storage for our `EE` objects.
+     * An `Events` instance is a plain object whose properties are event names.
+     *
+     * @constructor
+     * @private
+     */
+    function Events() { }
 
     //
-    // This hack is needed because the `__proto__` property is still inherited in
-    // some old browsers like Android 4, iPhone 5.1, Opera 11 and Safari 5.
+    // We try to not inherit from `Object.prototype`. In some engines creating an
+    // instance in this way is faster than calling `Object.create(null)` directly.
+    // If `Object.create(null)` is not supported we prefix the event names with a
+    // character to make sure that the built-in object properties are not
+    // overridden or used as an attack vector.
     //
-    if (!new Events().__proto__) prefix = false;
-  }
-
-  /**
-   * Representation of a single event listener.
-   *
-   * @param {Function} fn The listener function.
-   * @param {*} context The context to invoke the listener with.
-   * @param {Boolean} [once=false] Specify if the listener is a one-time listener.
-   * @constructor
-   * @private
-   */
-  function EE(fn, context, once) {
-    this.fn = fn;
-    this.context = context;
-    this.once = once || false;
-  }
-
-  /**
-   * Add a listener for a given event.
-   *
-   * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
-   * @param {(String|Symbol)} event The event name.
-   * @param {Function} fn The listener function.
-   * @param {*} context The context to invoke the listener with.
-   * @param {Boolean} once Specify if the listener is a one-time listener.
-   * @returns {EventEmitter}
-   * @private
-   */
-  function addListener(emitter, event, fn, context, once) {
-    if (typeof fn !== 'function') {
-      throw new TypeError('The listener must be a function');
-    }
-
-    var listener = new EE(fn, context || emitter, once)
-      , evt = prefix ? prefix + event : event;
-
-    if (!emitter._events[evt]) emitter._events[evt] = listener, emitter._eventsCount++;
-    else if (!emitter._events[evt].fn) emitter._events[evt].push(listener);
-    else emitter._events[evt] = [emitter._events[evt], listener];
-
-    return emitter;
-  }
-
-  /**
-   * Clear event by name.
-   *
-   * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
-   * @param {(String|Symbol)} evt The Event name.
-   * @private
-   */
-  function clearEvent(emitter, evt) {
-    if (--emitter._eventsCount === 0) emitter._events = new Events();
-    else delete emitter._events[evt];
-  }
-
-  /**
-   * Minimal `EventEmitter` interface that is molded against the Node.js
-   * `EventEmitter` interface.
-   *
-   * @constructor
-   * @public
-   */
-  function EventEmitter() {
-    this._events = new Events();
-    this._eventsCount = 0;
-  }
-
-  /**
-   * Return an array listing the events for which the emitter has registered
-   * listeners.
-   *
-   * @returns {Array}
-   * @public
-   */
-  EventEmitter.prototype.eventNames = function eventNames() {
-    var names = []
-      , events
-      , name;
-
-    if (this._eventsCount === 0) return names;
-
-    for (name in (events = this._events)) {
-      if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
-    }
-
-    if (Object.getOwnPropertySymbols) {
-      return names.concat(Object.getOwnPropertySymbols(events));
-    }
-
-    return names;
-  };
-
-  /**
-   * Return the listeners registered for a given event.
-   *
-   * @param {(String|Symbol)} event The event name.
-   * @returns {Array} The registered listeners.
-   * @public
-   */
-  EventEmitter.prototype.listeners = function listeners(event) {
-    var evt = prefix ? prefix + event : event
-      , handlers = this._events[evt];
-
-    if (!handlers) return [];
-    if (handlers.fn) return [handlers.fn];
-
-    for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
-      ee[i] = handlers[i].fn;
-    }
-
-    return ee;
-  };
-
-  /**
-   * Return the number of listeners listening to a given event.
-   *
-   * @param {(String|Symbol)} event The event name.
-   * @returns {Number} The number of listeners.
-   * @public
-   */
-  EventEmitter.prototype.listenerCount = function listenerCount(event) {
-    var evt = prefix ? prefix + event : event
-      , listeners = this._events[evt];
-
-    if (!listeners) return 0;
-    if (listeners.fn) return 1;
-    return listeners.length;
-  };
-
-  /**
-   * Calls each of the listeners registered for a given event.
-   *
-   * @param {(String|Symbol)} event The event name.
-   * @returns {Boolean} `true` if the event had listeners, else `false`.
-   * @public
-   */
-  EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
-    var evt = prefix ? prefix + event : event;
-
-    if (!this._events[evt]) return false;
-
-    var listeners = this._events[evt]
-      , len = arguments.length
-      , args
-      , i;
-
-    if (listeners.fn) {
-      if (listeners.once) this.removeListener(event, listeners.fn, undefined, true);
-
-      switch (len) {
-        case 1: return listeners.fn.call(listeners.context), true;
-        case 2: return listeners.fn.call(listeners.context, a1), true;
-        case 3: return listeners.fn.call(listeners.context, a1, a2), true;
-        case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
-        case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
-        case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
-      }
-
-      for (i = 1, args = new Array(len -1); i < len; i++) {
-        args[i - 1] = arguments[i];
-      }
-
-      listeners.fn.apply(listeners.context, args);
-    } else {
-      var length = listeners.length
-        , j;
-
-      for (i = 0; i < length; i++) {
-        if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true);
-
-        switch (len) {
-          case 1: listeners[i].fn.call(listeners[i].context); break;
-          case 2: listeners[i].fn.call(listeners[i].context, a1); break;
-          case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
-          case 4: listeners[i].fn.call(listeners[i].context, a1, a2, a3); break;
-          default:
-            if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
-              args[j - 1] = arguments[j];
-            }
-
-            listeners[i].fn.apply(listeners[i].context, args);
-        }
-      }
-    }
-
-    return true;
-  };
-
-  /**
-   * Add a listener for a given event.
-   *
-   * @param {(String|Symbol)} event The event name.
-   * @param {Function} fn The listener function.
-   * @param {*} [context=this] The context to invoke the listener with.
-   * @returns {EventEmitter} `this`.
-   * @public
-   */
-  EventEmitter.prototype.on = function on(event, fn, context) {
-    return addListener(this, event, fn, context, false);
-  };
-
-  /**
-   * Add a one-time listener for a given event.
-   *
-   * @param {(String|Symbol)} event The event name.
-   * @param {Function} fn The listener function.
-   * @param {*} [context=this] The context to invoke the listener with.
-   * @returns {EventEmitter} `this`.
-   * @public
-   */
-  EventEmitter.prototype.once = function once(event, fn, context) {
-    return addListener(this, event, fn, context, true);
-  };
-
-  /**
-   * Remove the listeners of a given event.
-   *
-   * @param {(String|Symbol)} event The event name.
-   * @param {Function} fn Only remove the listeners that match this function.
-   * @param {*} context Only remove the listeners that have this context.
-   * @param {Boolean} once Only remove one-time listeners.
-   * @returns {EventEmitter} `this`.
-   * @public
-   */
-  EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
-    var evt = prefix ? prefix + event : event;
-
-    if (!this._events[evt]) return this;
-    if (!fn) {
-      clearEvent(this, evt);
-      return this;
-    }
-
-    var listeners = this._events[evt];
-
-    if (listeners.fn) {
-      if (
-        listeners.fn === fn &&
-        (!once || listeners.once) &&
-        (!context || listeners.context === context)
-      ) {
-        clearEvent(this, evt);
-      }
-    } else {
-      for (var i = 0, events = [], length = listeners.length; i < length; i++) {
-        if (
-          listeners[i].fn !== fn ||
-          (once && !listeners[i].once) ||
-          (context && listeners[i].context !== context)
-        ) {
-          events.push(listeners[i]);
-        }
-      }
+    if (Object.create) {
+      Events.prototype = Object.create(null);
 
       //
-      // Reset the array, or remove it completely if we have no more listeners.
+      // This hack is needed because the `__proto__` property is still inherited in
+      // some old browsers like Android 4, iPhone 5.1, Opera 11 and Safari 5.
       //
-      if (events.length) this._events[evt] = events.length === 1 ? events[0] : events;
-      else clearEvent(this, evt);
+      if (!new Events().__proto__) prefix = false;
     }
 
-    return this;
-  };
+    /**
+     * Representation of a single event listener.
+     *
+     * @param {Function} fn The listener function.
+     * @param {*} context The context to invoke the listener with.
+     * @param {Boolean} [once=false] Specify if the listener is a one-time listener.
+     * @constructor
+     * @private
+     */
+    function EE(fn, context, once) {
+      this.fn = fn;
+      this.context = context;
+      this.once = once || false;
+    }
 
-  /**
-   * Remove all listeners, or those of the specified event.
-   *
-   * @param {(String|Symbol)} [event] The event name.
-   * @returns {EventEmitter} `this`.
-   * @public
-   */
-  EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
-    var evt;
+    /**
+     * Add a listener for a given event.
+     *
+     * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+     * @param {(String|Symbol)} event The event name.
+     * @param {Function} fn The listener function.
+     * @param {*} context The context to invoke the listener with.
+     * @param {Boolean} once Specify if the listener is a one-time listener.
+     * @returns {EventEmitter}
+     * @private
+     */
+    function addListener(emitter, event, fn, context, once) {
+      if (typeof fn !== 'function') {
+        throw new TypeError('The listener must be a function');
+      }
 
-    if (event) {
-      evt = prefix ? prefix + event : event;
-      if (this._events[evt]) clearEvent(this, evt);
-    } else {
+      var listener = new EE(fn, context || emitter, once)
+        , evt = prefix ? prefix + event : event;
+
+      if (!emitter._events[evt]) emitter._events[evt] = listener, emitter._eventsCount++;
+      else if (!emitter._events[evt].fn) emitter._events[evt].push(listener);
+      else emitter._events[evt] = [emitter._events[evt], listener];
+
+      return emitter;
+    }
+
+    /**
+     * Clear event by name.
+     *
+     * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+     * @param {(String|Symbol)} evt The Event name.
+     * @private
+     */
+    function clearEvent(emitter, evt) {
+      if (--emitter._eventsCount === 0) emitter._events = new Events();
+      else delete emitter._events[evt];
+    }
+
+    /**
+     * Minimal `EventEmitter` interface that is molded against the Node.js
+     * `EventEmitter` interface.
+     *
+     * @constructor
+     * @public
+     */
+    function EventEmitter() {
       this._events = new Events();
       this._eventsCount = 0;
     }
 
-    return this;
-  };
+    /**
+     * Return an array listing the events for which the emitter has registered
+     * listeners.
+     *
+     * @returns {Array}
+     * @public
+     */
+    EventEmitter.prototype.eventNames = function eventNames() {
+      var names = []
+        , events
+        , name;
 
-  //
-  // Alias methods names because people roll like that.
-  //
-  EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-  EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+      if (this._eventsCount === 0) return names;
 
-  //
-  // Expose the prefix.
-  //
-  EventEmitter.prefixed = prefix;
+      for (name in (events = this._events)) {
+        if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
+      }
 
-  //
-  // Allow `EventEmitter` to be imported as module namespace.
-  //
-  EventEmitter.EventEmitter = EventEmitter;
+      if (Object.getOwnPropertySymbols) {
+        return names.concat(Object.getOwnPropertySymbols(events));
+      }
 
-  //
-  // Expose the module.
-  //
-  if ('undefined' !== 'object') {
-    module.exports = EventEmitter;
-  }
+      return names;
+    };
+
+    /**
+     * Return the listeners registered for a given event.
+     *
+     * @param {(String|Symbol)} event The event name.
+     * @returns {Array} The registered listeners.
+     * @public
+     */
+    EventEmitter.prototype.listeners = function listeners(event) {
+      var evt = prefix ? prefix + event : event
+        , handlers = this._events[evt];
+
+      if (!handlers) return [];
+      if (handlers.fn) return [handlers.fn];
+
+      for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
+        ee[i] = handlers[i].fn;
+      }
+
+      return ee;
+    };
+
+    /**
+     * Return the number of listeners listening to a given event.
+     *
+     * @param {(String|Symbol)} event The event name.
+     * @returns {Number} The number of listeners.
+     * @public
+     */
+    EventEmitter.prototype.listenerCount = function listenerCount(event) {
+      var evt = prefix ? prefix + event : event
+        , listeners = this._events[evt];
+
+      if (!listeners) return 0;
+      if (listeners.fn) return 1;
+      return listeners.length;
+    };
+
+    /**
+     * Calls each of the listeners registered for a given event.
+     *
+     * @param {(String|Symbol)} event The event name.
+     * @returns {Boolean} `true` if the event had listeners, else `false`.
+     * @public
+     */
+    EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+      var evt = prefix ? prefix + event : event;
+
+      if (!this._events[evt]) return false;
+
+      var listeners = this._events[evt]
+        , len = arguments.length
+        , args
+        , i;
+
+      if (listeners.fn) {
+        if (listeners.once) this.removeListener(event, listeners.fn, undefined, true);
+
+        switch (len) {
+          case 1: return listeners.fn.call(listeners.context), true;
+          case 2: return listeners.fn.call(listeners.context, a1), true;
+          case 3: return listeners.fn.call(listeners.context, a1, a2), true;
+          case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
+          case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
+          case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
+        }
+
+        for (i = 1, args = new Array(len - 1); i < len; i++) {
+          args[i - 1] = arguments[i];
+        }
+
+        listeners.fn.apply(listeners.context, args);
+      } else {
+        var length = listeners.length
+          , j;
+
+        for (i = 0; i < length; i++) {
+          if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true);
+
+          switch (len) {
+            case 1: listeners[i].fn.call(listeners[i].context); break;
+            case 2: listeners[i].fn.call(listeners[i].context, a1); break;
+            case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
+            case 4: listeners[i].fn.call(listeners[i].context, a1, a2, a3); break;
+            default:
+              if (!args) for (j = 1, args = new Array(len - 1); j < len; j++) {
+                args[j - 1] = arguments[j];
+              }
+
+              listeners[i].fn.apply(listeners[i].context, args);
+          }
+        }
+      }
+
+      return true;
+    };
+
+    /**
+     * Add a listener for a given event.
+     *
+     * @param {(String|Symbol)} event The event name.
+     * @param {Function} fn The listener function.
+     * @param {*} [context=this] The context to invoke the listener with.
+     * @returns {EventEmitter} `this`.
+     * @public
+     */
+    EventEmitter.prototype.on = function on(event, fn, context) {
+      return addListener(this, event, fn, context, false);
+    };
+
+    /**
+     * Add a one-time listener for a given event.
+     *
+     * @param {(String|Symbol)} event The event name.
+     * @param {Function} fn The listener function.
+     * @param {*} [context=this] The context to invoke the listener with.
+     * @returns {EventEmitter} `this`.
+     * @public
+     */
+    EventEmitter.prototype.once = function once(event, fn, context) {
+      return addListener(this, event, fn, context, true);
+    };
+
+    /**
+     * Remove the listeners of a given event.
+     *
+     * @param {(String|Symbol)} event The event name.
+     * @param {Function} fn Only remove the listeners that match this function.
+     * @param {*} context Only remove the listeners that have this context.
+     * @param {Boolean} once Only remove one-time listeners.
+     * @returns {EventEmitter} `this`.
+     * @public
+     */
+    EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
+      var evt = prefix ? prefix + event : event;
+
+      if (!this._events[evt]) return this;
+      if (!fn) {
+        clearEvent(this, evt);
+        return this;
+      }
+
+      var listeners = this._events[evt];
+
+      if (listeners.fn) {
+        if (
+          listeners.fn === fn &&
+          (!once || listeners.once) &&
+          (!context || listeners.context === context)
+        ) {
+          clearEvent(this, evt);
+        }
+      } else {
+        for (var i = 0, events = [], length = listeners.length; i < length; i++) {
+          if (
+            listeners[i].fn !== fn ||
+            (once && !listeners[i].once) ||
+            (context && listeners[i].context !== context)
+          ) {
+            events.push(listeners[i]);
+          }
+        }
+
+        //
+        // Reset the array, or remove it completely if we have no more listeners.
+        //
+        if (events.length) this._events[evt] = events.length === 1 ? events[0] : events;
+        else clearEvent(this, evt);
+      }
+
+      return this;
+    };
+
+    /**
+     * Remove all listeners, or those of the specified event.
+     *
+     * @param {(String|Symbol)} [event] The event name.
+     * @returns {EventEmitter} `this`.
+     * @public
+     */
+    EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
+      var evt;
+
+      if (event) {
+        evt = prefix ? prefix + event : event;
+        if (this._events[evt]) clearEvent(this, evt);
+      } else {
+        this._events = new Events();
+        this._eventsCount = 0;
+      }
+
+      return this;
+    };
+
+    //
+    // Alias methods names because people roll like that.
+    //
+    EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+    EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+
+    //
+    // Expose the prefix.
+    //
+    EventEmitter.prefixed = prefix;
+
+    //
+    // Allow `EventEmitter` to be imported as module namespace.
+    //
+    EventEmitter.EventEmitter = EventEmitter;
+
+    //
+    // Expose the module.
+    //
+    if ('undefined' !== 'object') {
+      module.exports = EventEmitter;
+    }
   });
 
   'use strict';
@@ -2057,1228 +2057,1228 @@ var PIXI = (function (exports) {
 
   function earcut(data, holeIndices, dim) {
 
-      dim = dim || 2;
+    dim = dim || 2;
 
-      var hasHoles = holeIndices && holeIndices.length,
-          outerLen = hasHoles ? holeIndices[0] * dim : data.length,
-          outerNode = linkedList(data, 0, outerLen, dim, true),
-          triangles = [];
+    var hasHoles = holeIndices && holeIndices.length,
+      outerLen = hasHoles ? holeIndices[0] * dim : data.length,
+      outerNode = linkedList(data, 0, outerLen, dim, true),
+      triangles = [];
 
-      if (!outerNode || outerNode.next === outerNode.prev) return triangles;
+    if (!outerNode || outerNode.next === outerNode.prev) return triangles;
 
-      var minX, minY, maxX, maxY, x, y, invSize;
+    var minX, minY, maxX, maxY, x, y, invSize;
 
-      if (hasHoles) outerNode = eliminateHoles(data, holeIndices, outerNode, dim);
+    if (hasHoles) outerNode = eliminateHoles(data, holeIndices, outerNode, dim);
 
-      // if the shape is not too simple, we'll use z-order curve hash later; calculate polygon bbox
-      if (data.length > 80 * dim) {
-          minX = maxX = data[0];
-          minY = maxY = data[1];
+    // if the shape is not too simple, we'll use z-order curve hash later; calculate polygon bbox
+    if (data.length > 80 * dim) {
+      minX = maxX = data[0];
+      minY = maxY = data[1];
 
-          for (var i = dim; i < outerLen; i += dim) {
-              x = data[i];
-              y = data[i + 1];
-              if (x < minX) minX = x;
-              if (y < minY) minY = y;
-              if (x > maxX) maxX = x;
-              if (y > maxY) maxY = y;
-          }
-
-          // minX, minY and invSize are later used to transform coords into integers for z-order calculation
-          invSize = Math.max(maxX - minX, maxY - minY);
-          invSize = invSize !== 0 ? 32767 / invSize : 0;
+      for (var i = dim; i < outerLen; i += dim) {
+        x = data[i];
+        y = data[i + 1];
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
       }
 
-      earcutLinked(outerNode, triangles, dim, minX, minY, invSize, 0);
+      // minX, minY and invSize are later used to transform coords into integers for z-order calculation
+      invSize = Math.max(maxX - minX, maxY - minY);
+      invSize = invSize !== 0 ? 32767 / invSize : 0;
+    }
 
-      return triangles;
+    earcutLinked(outerNode, triangles, dim, minX, minY, invSize, 0);
+
+    return triangles;
   }
 
   // create a circular doubly linked list from polygon points in the specified winding order
   function linkedList(data, start, end, dim, clockwise) {
-      var i, last;
+    var i, last;
 
-      if (clockwise === (signedArea(data, start, end, dim) > 0)) {
-          for (i = start; i < end; i += dim) last = insertNode(i, data[i], data[i + 1], last);
-      } else {
-          for (i = end - dim; i >= start; i -= dim) last = insertNode(i, data[i], data[i + 1], last);
-      }
+    if (clockwise === (signedArea(data, start, end, dim) > 0)) {
+      for (i = start; i < end; i += dim) last = insertNode(i, data[i], data[i + 1], last);
+    } else {
+      for (i = end - dim; i >= start; i -= dim) last = insertNode(i, data[i], data[i + 1], last);
+    }
 
-      if (last && equals(last, last.next)) {
-          removeNode(last);
-          last = last.next;
-      }
+    if (last && equals(last, last.next)) {
+      removeNode(last);
+      last = last.next;
+    }
 
-      return last;
+    return last;
   }
 
   // eliminate colinear or duplicate points
   function filterPoints(start, end) {
-      if (!start) return start;
-      if (!end) end = start;
+    if (!start) return start;
+    if (!end) end = start;
 
-      var p = start,
-          again;
-      do {
-          again = false;
+    var p = start,
+      again;
+    do {
+      again = false;
 
-          if (!p.steiner && (equals(p, p.next) || area(p.prev, p, p.next) === 0)) {
-              removeNode(p);
-              p = end = p.prev;
-              if (p === p.next) break;
-              again = true;
+      if (!p.steiner && (equals(p, p.next) || area(p.prev, p, p.next) === 0)) {
+        removeNode(p);
+        p = end = p.prev;
+        if (p === p.next) break;
+        again = true;
 
-          } else {
-              p = p.next;
-          }
-      } while (again || p !== end);
+      } else {
+        p = p.next;
+      }
+    } while (again || p !== end);
 
-      return end;
+    return end;
   }
 
   // main ear slicing loop which triangulates a polygon (given as a linked list)
   function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
-      if (!ear) return;
+    if (!ear) return;
 
-      // interlink polygon nodes in z-order
-      if (!pass && invSize) indexCurve(ear, minX, minY, invSize);
+    // interlink polygon nodes in z-order
+    if (!pass && invSize) indexCurve(ear, minX, minY, invSize);
 
-      var stop = ear,
-          prev, next;
+    var stop = ear,
+      prev, next;
 
-      // iterate through ears, slicing them one by one
-      while (ear.prev !== ear.next) {
-          prev = ear.prev;
-          next = ear.next;
+    // iterate through ears, slicing them one by one
+    while (ear.prev !== ear.next) {
+      prev = ear.prev;
+      next = ear.next;
 
-          if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
-              // cut off the triangle
-              triangles.push(prev.i / dim | 0);
-              triangles.push(ear.i / dim | 0);
-              triangles.push(next.i / dim | 0);
+      if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
+        // cut off the triangle
+        triangles.push(prev.i / dim | 0);
+        triangles.push(ear.i / dim | 0);
+        triangles.push(next.i / dim | 0);
 
-              removeNode(ear);
+        removeNode(ear);
 
-              // skipping the next vertex leads to less sliver triangles
-              ear = next.next;
-              stop = next.next;
+        // skipping the next vertex leads to less sliver triangles
+        ear = next.next;
+        stop = next.next;
 
-              continue;
-          }
-
-          ear = next;
-
-          // if we looped through the whole remaining polygon and can't find any more ears
-          if (ear === stop) {
-              // try filtering points and slicing again
-              if (!pass) {
-                  earcutLinked(filterPoints(ear), triangles, dim, minX, minY, invSize, 1);
-
-              // if this didn't work, try curing all small self-intersections locally
-              } else if (pass === 1) {
-                  ear = cureLocalIntersections(filterPoints(ear), triangles, dim);
-                  earcutLinked(ear, triangles, dim, minX, minY, invSize, 2);
-
-              // as a last resort, try splitting the remaining polygon into two
-              } else if (pass === 2) {
-                  splitEarcut(ear, triangles, dim, minX, minY, invSize);
-              }
-
-              break;
-          }
+        continue;
       }
+
+      ear = next;
+
+      // if we looped through the whole remaining polygon and can't find any more ears
+      if (ear === stop) {
+        // try filtering points and slicing again
+        if (!pass) {
+          earcutLinked(filterPoints(ear), triangles, dim, minX, minY, invSize, 1);
+
+          // if this didn't work, try curing all small self-intersections locally
+        } else if (pass === 1) {
+          ear = cureLocalIntersections(filterPoints(ear), triangles, dim);
+          earcutLinked(ear, triangles, dim, minX, minY, invSize, 2);
+
+          // as a last resort, try splitting the remaining polygon into two
+        } else if (pass === 2) {
+          splitEarcut(ear, triangles, dim, minX, minY, invSize);
+        }
+
+        break;
+      }
+    }
   }
 
   // check whether a polygon node forms a valid ear with adjacent nodes
   function isEar(ear) {
-      var a = ear.prev,
-          b = ear,
-          c = ear.next;
+    var a = ear.prev,
+      b = ear,
+      c = ear.next;
 
-      if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
+    if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
 
-      // now make sure we don't have other points inside the potential ear
-      var ax = a.x, bx = b.x, cx = c.x, ay = a.y, by = b.y, cy = c.y;
+    // now make sure we don't have other points inside the potential ear
+    var ax = a.x, bx = b.x, cx = c.x, ay = a.y, by = b.y, cy = c.y;
 
-      // triangle bbox; min & max are calculated like this for speed
-      var x0 = ax < bx ? (ax < cx ? ax : cx) : (bx < cx ? bx : cx),
-          y0 = ay < by ? (ay < cy ? ay : cy) : (by < cy ? by : cy),
-          x1 = ax > bx ? (ax > cx ? ax : cx) : (bx > cx ? bx : cx),
-          y1 = ay > by ? (ay > cy ? ay : cy) : (by > cy ? by : cy);
+    // triangle bbox; min & max are calculated like this for speed
+    var x0 = ax < bx ? (ax < cx ? ax : cx) : (bx < cx ? bx : cx),
+      y0 = ay < by ? (ay < cy ? ay : cy) : (by < cy ? by : cy),
+      x1 = ax > bx ? (ax > cx ? ax : cx) : (bx > cx ? bx : cx),
+      y1 = ay > by ? (ay > cy ? ay : cy) : (by > cy ? by : cy);
 
-      var p = c.next;
-      while (p !== a) {
-          if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 &&
-              pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) &&
-              area(p.prev, p, p.next) >= 0) return false;
-          p = p.next;
-      }
+    var p = c.next;
+    while (p !== a) {
+      if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 &&
+        pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) &&
+        area(p.prev, p, p.next) >= 0) return false;
+      p = p.next;
+    }
 
-      return true;
+    return true;
   }
 
   function isEarHashed(ear, minX, minY, invSize) {
-      var a = ear.prev,
-          b = ear,
-          c = ear.next;
+    var a = ear.prev,
+      b = ear,
+      c = ear.next;
 
-      if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
+    if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
 
-      var ax = a.x, bx = b.x, cx = c.x, ay = a.y, by = b.y, cy = c.y;
+    var ax = a.x, bx = b.x, cx = c.x, ay = a.y, by = b.y, cy = c.y;
 
-      // triangle bbox; min & max are calculated like this for speed
-      var x0 = ax < bx ? (ax < cx ? ax : cx) : (bx < cx ? bx : cx),
-          y0 = ay < by ? (ay < cy ? ay : cy) : (by < cy ? by : cy),
-          x1 = ax > bx ? (ax > cx ? ax : cx) : (bx > cx ? bx : cx),
-          y1 = ay > by ? (ay > cy ? ay : cy) : (by > cy ? by : cy);
+    // triangle bbox; min & max are calculated like this for speed
+    var x0 = ax < bx ? (ax < cx ? ax : cx) : (bx < cx ? bx : cx),
+      y0 = ay < by ? (ay < cy ? ay : cy) : (by < cy ? by : cy),
+      x1 = ax > bx ? (ax > cx ? ax : cx) : (bx > cx ? bx : cx),
+      y1 = ay > by ? (ay > cy ? ay : cy) : (by > cy ? by : cy);
 
-      // z-order range for the current triangle bbox;
-      var minZ = zOrder(x0, y0, minX, minY, invSize),
-          maxZ = zOrder(x1, y1, minX, minY, invSize);
+    // z-order range for the current triangle bbox;
+    var minZ = zOrder(x0, y0, minX, minY, invSize),
+      maxZ = zOrder(x1, y1, minX, minY, invSize);
 
-      var p = ear.prevZ,
-          n = ear.nextZ;
+    var p = ear.prevZ,
+      n = ear.nextZ;
 
-      // look for points inside the triangle in both directions
-      while (p && p.z >= minZ && n && n.z <= maxZ) {
-          if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c &&
-              pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
-          p = p.prevZ;
+    // look for points inside the triangle in both directions
+    while (p && p.z >= minZ && n && n.z <= maxZ) {
+      if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c &&
+        pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
+      p = p.prevZ;
 
-          if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c &&
-              pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
-          n = n.nextZ;
-      }
+      if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c &&
+        pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
+      n = n.nextZ;
+    }
 
-      // look for remaining points in decreasing z-order
-      while (p && p.z >= minZ) {
-          if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c &&
-              pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
-          p = p.prevZ;
-      }
+    // look for remaining points in decreasing z-order
+    while (p && p.z >= minZ) {
+      if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c &&
+        pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
+      p = p.prevZ;
+    }
 
-      // look for remaining points in increasing z-order
-      while (n && n.z <= maxZ) {
-          if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c &&
-              pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
-          n = n.nextZ;
-      }
+    // look for remaining points in increasing z-order
+    while (n && n.z <= maxZ) {
+      if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c &&
+        pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
+      n = n.nextZ;
+    }
 
-      return true;
+    return true;
   }
 
   // go through all polygon nodes and cure small local self-intersections
   function cureLocalIntersections(start, triangles, dim) {
-      var p = start;
-      do {
-          var a = p.prev,
-              b = p.next.next;
+    var p = start;
+    do {
+      var a = p.prev,
+        b = p.next.next;
 
-          if (!equals(a, b) && intersects(a, p, p.next, b) && locallyInside(a, b) && locallyInside(b, a)) {
+      if (!equals(a, b) && intersects(a, p, p.next, b) && locallyInside(a, b) && locallyInside(b, a)) {
 
-              triangles.push(a.i / dim | 0);
-              triangles.push(p.i / dim | 0);
-              triangles.push(b.i / dim | 0);
+        triangles.push(a.i / dim | 0);
+        triangles.push(p.i / dim | 0);
+        triangles.push(b.i / dim | 0);
 
-              // remove two nodes involved
-              removeNode(p);
-              removeNode(p.next);
+        // remove two nodes involved
+        removeNode(p);
+        removeNode(p.next);
 
-              p = start = b;
-          }
-          p = p.next;
-      } while (p !== start);
+        p = start = b;
+      }
+      p = p.next;
+    } while (p !== start);
 
-      return filterPoints(p);
+    return filterPoints(p);
   }
 
   // try splitting polygon into two and triangulate them independently
   function splitEarcut(start, triangles, dim, minX, minY, invSize) {
-      // look for a valid diagonal that divides the polygon into two
-      var a = start;
-      do {
-          var b = a.next.next;
-          while (b !== a.prev) {
-              if (a.i !== b.i && isValidDiagonal(a, b)) {
-                  // split the polygon in two by the diagonal
-                  var c = splitPolygon(a, b);
+    // look for a valid diagonal that divides the polygon into two
+    var a = start;
+    do {
+      var b = a.next.next;
+      while (b !== a.prev) {
+        if (a.i !== b.i && isValidDiagonal(a, b)) {
+          // split the polygon in two by the diagonal
+          var c = splitPolygon(a, b);
 
-                  // filter colinear points around the cuts
-                  a = filterPoints(a, a.next);
-                  c = filterPoints(c, c.next);
+          // filter colinear points around the cuts
+          a = filterPoints(a, a.next);
+          c = filterPoints(c, c.next);
 
-                  // run earcut on each half
-                  earcutLinked(a, triangles, dim, minX, minY, invSize, 0);
-                  earcutLinked(c, triangles, dim, minX, minY, invSize, 0);
-                  return;
-              }
-              b = b.next;
-          }
-          a = a.next;
-      } while (a !== start);
+          // run earcut on each half
+          earcutLinked(a, triangles, dim, minX, minY, invSize, 0);
+          earcutLinked(c, triangles, dim, minX, minY, invSize, 0);
+          return;
+        }
+        b = b.next;
+      }
+      a = a.next;
+    } while (a !== start);
   }
 
   // link every hole into the outer loop, producing a single-ring polygon without holes
   function eliminateHoles(data, holeIndices, outerNode, dim) {
-      var queue = [],
-          i, len, start, end, list;
+    var queue = [],
+      i, len, start, end, list;
 
-      for (i = 0, len = holeIndices.length; i < len; i++) {
-          start = holeIndices[i] * dim;
-          end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
-          list = linkedList(data, start, end, dim, false);
-          if (list === list.next) list.steiner = true;
-          queue.push(getLeftmost(list));
-      }
+    for (i = 0, len = holeIndices.length; i < len; i++) {
+      start = holeIndices[i] * dim;
+      end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
+      list = linkedList(data, start, end, dim, false);
+      if (list === list.next) list.steiner = true;
+      queue.push(getLeftmost(list));
+    }
 
-      queue.sort(compareX);
+    queue.sort(compareX);
 
-      // process holes from left to right
-      for (i = 0; i < queue.length; i++) {
-          outerNode = eliminateHole(queue[i], outerNode);
-      }
+    // process holes from left to right
+    for (i = 0; i < queue.length; i++) {
+      outerNode = eliminateHole(queue[i], outerNode);
+    }
 
-      return outerNode;
+    return outerNode;
   }
 
   function compareX(a, b) {
-      return a.x - b.x;
+    return a.x - b.x;
   }
 
   // find a bridge between vertices that connects hole with an outer ring and and link it
   function eliminateHole(hole, outerNode) {
-      var bridge = findHoleBridge(hole, outerNode);
-      if (!bridge) {
-          return outerNode;
-      }
+    var bridge = findHoleBridge(hole, outerNode);
+    if (!bridge) {
+      return outerNode;
+    }
 
-      var bridgeReverse = splitPolygon(bridge, hole);
+    var bridgeReverse = splitPolygon(bridge, hole);
 
-      // filter collinear points around the cuts
-      filterPoints(bridgeReverse, bridgeReverse.next);
-      return filterPoints(bridge, bridge.next);
+    // filter collinear points around the cuts
+    filterPoints(bridgeReverse, bridgeReverse.next);
+    return filterPoints(bridge, bridge.next);
   }
 
   // David Eberly's algorithm for finding a bridge between hole and outer polygon
   function findHoleBridge(hole, outerNode) {
-      var p = outerNode,
-          hx = hole.x,
-          hy = hole.y,
-          qx = -Infinity,
-          m;
+    var p = outerNode,
+      hx = hole.x,
+      hy = hole.y,
+      qx = -Infinity,
+      m;
 
-      // find a segment intersected by a ray from the hole's leftmost point to the left;
-      // segment's endpoint with lesser x will be potential connection point
-      do {
-          if (hy <= p.y && hy >= p.next.y && p.next.y !== p.y) {
-              var x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
-              if (x <= hx && x > qx) {
-                  qx = x;
-                  m = p.x < p.next.x ? p : p.next;
-                  if (x === hx) return m; // hole touches outer segment; pick leftmost endpoint
-              }
-          }
-          p = p.next;
-      } while (p !== outerNode);
+    // find a segment intersected by a ray from the hole's leftmost point to the left;
+    // segment's endpoint with lesser x will be potential connection point
+    do {
+      if (hy <= p.y && hy >= p.next.y && p.next.y !== p.y) {
+        var x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
+        if (x <= hx && x > qx) {
+          qx = x;
+          m = p.x < p.next.x ? p : p.next;
+          if (x === hx) return m; // hole touches outer segment; pick leftmost endpoint
+        }
+      }
+      p = p.next;
+    } while (p !== outerNode);
 
-      if (!m) return null;
+    if (!m) return null;
 
-      // look for points inside the triangle of hole point, segment intersection and endpoint;
-      // if there are no points found, we have a valid connection;
-      // otherwise choose the point of the minimum angle with the ray as connection point
+    // look for points inside the triangle of hole point, segment intersection and endpoint;
+    // if there are no points found, we have a valid connection;
+    // otherwise choose the point of the minimum angle with the ray as connection point
 
-      var stop = m,
-          mx = m.x,
-          my = m.y,
-          tanMin = Infinity,
-          tan;
+    var stop = m,
+      mx = m.x,
+      my = m.y,
+      tanMin = Infinity,
+      tan;
 
-      p = m;
+    p = m;
 
-      do {
-          if (hx >= p.x && p.x >= mx && hx !== p.x &&
-                  pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
+    do {
+      if (hx >= p.x && p.x >= mx && hx !== p.x &&
+        pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
 
-              tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
+        tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
 
-              if (locallyInside(p, hole) &&
-                  (tan < tanMin || (tan === tanMin && (p.x > m.x || (p.x === m.x && sectorContainsSector(m, p)))))) {
-                  m = p;
-                  tanMin = tan;
-              }
-          }
+        if (locallyInside(p, hole) &&
+          (tan < tanMin || (tan === tanMin && (p.x > m.x || (p.x === m.x && sectorContainsSector(m, p)))))) {
+          m = p;
+          tanMin = tan;
+        }
+      }
 
-          p = p.next;
-      } while (p !== stop);
+      p = p.next;
+    } while (p !== stop);
 
-      return m;
+    return m;
   }
 
   // whether sector in vertex m contains sector in vertex p in the same coordinates
   function sectorContainsSector(m, p) {
-      return area(m.prev, m, p.prev) < 0 && area(p.next, m, m.next) < 0;
+    return area(m.prev, m, p.prev) < 0 && area(p.next, m, m.next) < 0;
   }
 
   // interlink polygon nodes in z-order
   function indexCurve(start, minX, minY, invSize) {
-      var p = start;
-      do {
-          if (p.z === 0) p.z = zOrder(p.x, p.y, minX, minY, invSize);
-          p.prevZ = p.prev;
-          p.nextZ = p.next;
-          p = p.next;
-      } while (p !== start);
+    var p = start;
+    do {
+      if (p.z === 0) p.z = zOrder(p.x, p.y, minX, minY, invSize);
+      p.prevZ = p.prev;
+      p.nextZ = p.next;
+      p = p.next;
+    } while (p !== start);
 
-      p.prevZ.nextZ = null;
-      p.prevZ = null;
+    p.prevZ.nextZ = null;
+    p.prevZ = null;
 
-      sortLinked(p);
+    sortLinked(p);
   }
 
   // Simon Tatham's linked list merge sort algorithm
   // http://www.chiark.greenend.org.uk/~sgtatham/algorithms/listsort.html
   function sortLinked(list) {
-      var i, p, q, e, tail, numMerges, pSize, qSize,
-          inSize = 1;
+    var i, p, q, e, tail, numMerges, pSize, qSize,
+      inSize = 1;
 
-      do {
-          p = list;
-          list = null;
-          tail = null;
-          numMerges = 0;
+    do {
+      p = list;
+      list = null;
+      tail = null;
+      numMerges = 0;
 
-          while (p) {
-              numMerges++;
-              q = p;
-              pSize = 0;
-              for (i = 0; i < inSize; i++) {
-                  pSize++;
-                  q = q.nextZ;
-                  if (!q) break;
-              }
-              qSize = inSize;
+      while (p) {
+        numMerges++;
+        q = p;
+        pSize = 0;
+        for (i = 0; i < inSize; i++) {
+          pSize++;
+          q = q.nextZ;
+          if (!q) break;
+        }
+        qSize = inSize;
 
-              while (pSize > 0 || (qSize > 0 && q)) {
+        while (pSize > 0 || (qSize > 0 && q)) {
 
-                  if (pSize !== 0 && (qSize === 0 || !q || p.z <= q.z)) {
-                      e = p;
-                      p = p.nextZ;
-                      pSize--;
-                  } else {
-                      e = q;
-                      q = q.nextZ;
-                      qSize--;
-                  }
-
-                  if (tail) tail.nextZ = e;
-                  else list = e;
-
-                  e.prevZ = tail;
-                  tail = e;
-              }
-
-              p = q;
+          if (pSize !== 0 && (qSize === 0 || !q || p.z <= q.z)) {
+            e = p;
+            p = p.nextZ;
+            pSize--;
+          } else {
+            e = q;
+            q = q.nextZ;
+            qSize--;
           }
 
-          tail.nextZ = null;
-          inSize *= 2;
+          if (tail) tail.nextZ = e;
+          else list = e;
 
-      } while (numMerges > 1);
+          e.prevZ = tail;
+          tail = e;
+        }
 
-      return list;
+        p = q;
+      }
+
+      tail.nextZ = null;
+      inSize *= 2;
+
+    } while (numMerges > 1);
+
+    return list;
   }
 
   // z-order of a point given coords and inverse of the longer side of data bbox
   function zOrder(x, y, minX, minY, invSize) {
-      // coords are transformed into non-negative 15-bit integer range
-      x = (x - minX) * invSize | 0;
-      y = (y - minY) * invSize | 0;
+    // coords are transformed into non-negative 15-bit integer range
+    x = (x - minX) * invSize | 0;
+    y = (y - minY) * invSize | 0;
 
-      x = (x | (x << 8)) & 0x00FF00FF;
-      x = (x | (x << 4)) & 0x0F0F0F0F;
-      x = (x | (x << 2)) & 0x33333333;
-      x = (x | (x << 1)) & 0x55555555;
+    x = (x | (x << 8)) & 0x00FF00FF;
+    x = (x | (x << 4)) & 0x0F0F0F0F;
+    x = (x | (x << 2)) & 0x33333333;
+    x = (x | (x << 1)) & 0x55555555;
 
-      y = (y | (y << 8)) & 0x00FF00FF;
-      y = (y | (y << 4)) & 0x0F0F0F0F;
-      y = (y | (y << 2)) & 0x33333333;
-      y = (y | (y << 1)) & 0x55555555;
+    y = (y | (y << 8)) & 0x00FF00FF;
+    y = (y | (y << 4)) & 0x0F0F0F0F;
+    y = (y | (y << 2)) & 0x33333333;
+    y = (y | (y << 1)) & 0x55555555;
 
-      return x | (y << 1);
+    return x | (y << 1);
   }
 
   // find the leftmost node of a polygon ring
   function getLeftmost(start) {
-      var p = start,
-          leftmost = start;
-      do {
-          if (p.x < leftmost.x || (p.x === leftmost.x && p.y < leftmost.y)) leftmost = p;
-          p = p.next;
-      } while (p !== start);
+    var p = start,
+      leftmost = start;
+    do {
+      if (p.x < leftmost.x || (p.x === leftmost.x && p.y < leftmost.y)) leftmost = p;
+      p = p.next;
+    } while (p !== start);
 
-      return leftmost;
+    return leftmost;
   }
 
   // check if a point lies within a convex triangle
   function pointInTriangle(ax, ay, bx, by, cx, cy, px, py) {
-      return (cx - px) * (ay - py) >= (ax - px) * (cy - py) &&
-             (ax - px) * (by - py) >= (bx - px) * (ay - py) &&
-             (bx - px) * (cy - py) >= (cx - px) * (by - py);
+    return (cx - px) * (ay - py) >= (ax - px) * (cy - py) &&
+      (ax - px) * (by - py) >= (bx - px) * (ay - py) &&
+      (bx - px) * (cy - py) >= (cx - px) * (by - py);
   }
 
   // check if a diagonal between two polygon nodes is valid (lies in polygon interior)
   function isValidDiagonal(a, b) {
-      return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) && // dones't intersect other edges
-             (locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b) && // locally visible
-              (area(a.prev, a, b.prev) || area(a, b.prev, b)) || // does not create opposite-facing sectors
-              equals(a, b) && area(a.prev, a, a.next) > 0 && area(b.prev, b, b.next) > 0); // special zero-length case
+    return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) && // dones't intersect other edges
+      (locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b) && // locally visible
+        (area(a.prev, a, b.prev) || area(a, b.prev, b)) || // does not create opposite-facing sectors
+        equals(a, b) && area(a.prev, a, a.next) > 0 && area(b.prev, b, b.next) > 0); // special zero-length case
   }
 
   // signed area of a triangle
   function area(p, q, r) {
-      return (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+    return (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
   }
 
   // check if two points are equal
   function equals(p1, p2) {
-      return p1.x === p2.x && p1.y === p2.y;
+    return p1.x === p2.x && p1.y === p2.y;
   }
 
   // check if two segments intersect
   function intersects(p1, q1, p2, q2) {
-      var o1 = sign$1(area(p1, q1, p2));
-      var o2 = sign$1(area(p1, q1, q2));
-      var o3 = sign$1(area(p2, q2, p1));
-      var o4 = sign$1(area(p2, q2, q1));
+    var o1 = sign$1(area(p1, q1, p2));
+    var o2 = sign$1(area(p1, q1, q2));
+    var o3 = sign$1(area(p2, q2, p1));
+    var o4 = sign$1(area(p2, q2, q1));
 
-      if (o1 !== o2 && o3 !== o4) return true; // general case
+    if (o1 !== o2 && o3 !== o4) return true; // general case
 
-      if (o1 === 0 && onSegment(p1, p2, q1)) return true; // p1, q1 and p2 are collinear and p2 lies on p1q1
-      if (o2 === 0 && onSegment(p1, q2, q1)) return true; // p1, q1 and q2 are collinear and q2 lies on p1q1
-      if (o3 === 0 && onSegment(p2, p1, q2)) return true; // p2, q2 and p1 are collinear and p1 lies on p2q2
-      if (o4 === 0 && onSegment(p2, q1, q2)) return true; // p2, q2 and q1 are collinear and q1 lies on p2q2
+    if (o1 === 0 && onSegment(p1, p2, q1)) return true; // p1, q1 and p2 are collinear and p2 lies on p1q1
+    if (o2 === 0 && onSegment(p1, q2, q1)) return true; // p1, q1 and q2 are collinear and q2 lies on p1q1
+    if (o3 === 0 && onSegment(p2, p1, q2)) return true; // p2, q2 and p1 are collinear and p1 lies on p2q2
+    if (o4 === 0 && onSegment(p2, q1, q2)) return true; // p2, q2 and q1 are collinear and q1 lies on p2q2
 
-      return false;
+    return false;
   }
 
   // for collinear points p, q, r, check if point q lies on segment pr
   function onSegment(p, q, r) {
-      return q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) && q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
+    return q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) && q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
   }
 
   function sign$1(num) {
-      return num > 0 ? 1 : num < 0 ? -1 : 0;
+    return num > 0 ? 1 : num < 0 ? -1 : 0;
   }
 
   // check if a polygon diagonal intersects any polygon segments
   function intersectsPolygon(a, b) {
-      var p = a;
-      do {
-          if (p.i !== a.i && p.next.i !== a.i && p.i !== b.i && p.next.i !== b.i &&
-                  intersects(p, p.next, a, b)) return true;
-          p = p.next;
-      } while (p !== a);
+    var p = a;
+    do {
+      if (p.i !== a.i && p.next.i !== a.i && p.i !== b.i && p.next.i !== b.i &&
+        intersects(p, p.next, a, b)) return true;
+      p = p.next;
+    } while (p !== a);
 
-      return false;
+    return false;
   }
 
   // check if a polygon diagonal is locally inside the polygon
   function locallyInside(a, b) {
-      return area(a.prev, a, a.next) < 0 ?
-          area(a, b, a.next) >= 0 && area(a, a.prev, b) >= 0 :
-          area(a, b, a.prev) < 0 || area(a, a.next, b) < 0;
+    return area(a.prev, a, a.next) < 0 ?
+      area(a, b, a.next) >= 0 && area(a, a.prev, b) >= 0 :
+      area(a, b, a.prev) < 0 || area(a, a.next, b) < 0;
   }
 
   // check if the middle point of a polygon diagonal is inside the polygon
   function middleInside(a, b) {
-      var p = a,
-          inside = false,
-          px = (a.x + b.x) / 2,
-          py = (a.y + b.y) / 2;
-      do {
-          if (((p.y > py) !== (p.next.y > py)) && p.next.y !== p.y &&
-                  (px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x))
-              inside = !inside;
-          p = p.next;
-      } while (p !== a);
+    var p = a,
+      inside = false,
+      px = (a.x + b.x) / 2,
+      py = (a.y + b.y) / 2;
+    do {
+      if (((p.y > py) !== (p.next.y > py)) && p.next.y !== p.y &&
+        (px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x))
+        inside = !inside;
+      p = p.next;
+    } while (p !== a);
 
-      return inside;
+    return inside;
   }
 
   // link two polygon vertices with a bridge; if the vertices belong to the same ring, it splits polygon into two;
   // if one belongs to the outer ring and another to a hole, it merges it into a single ring
   function splitPolygon(a, b) {
-      var a2 = new Node(a.i, a.x, a.y),
-          b2 = new Node(b.i, b.x, b.y),
-          an = a.next,
-          bp = b.prev;
+    var a2 = new Node(a.i, a.x, a.y),
+      b2 = new Node(b.i, b.x, b.y),
+      an = a.next,
+      bp = b.prev;
 
-      a.next = b;
-      b.prev = a;
+    a.next = b;
+    b.prev = a;
 
-      a2.next = an;
-      an.prev = a2;
+    a2.next = an;
+    an.prev = a2;
 
-      b2.next = a2;
-      a2.prev = b2;
+    b2.next = a2;
+    a2.prev = b2;
 
-      bp.next = b2;
-      b2.prev = bp;
+    bp.next = b2;
+    b2.prev = bp;
 
-      return b2;
+    return b2;
   }
 
   // create a node and optionally link it with previous one (in a circular doubly linked list)
   function insertNode(i, x, y, last) {
-      var p = new Node(i, x, y);
+    var p = new Node(i, x, y);
 
-      if (!last) {
-          p.prev = p;
-          p.next = p;
+    if (!last) {
+      p.prev = p;
+      p.next = p;
 
-      } else {
-          p.next = last.next;
-          p.prev = last;
-          last.next.prev = p;
-          last.next = p;
-      }
-      return p;
+    } else {
+      p.next = last.next;
+      p.prev = last;
+      last.next.prev = p;
+      last.next = p;
+    }
+    return p;
   }
 
   function removeNode(p) {
-      p.next.prev = p.prev;
-      p.prev.next = p.next;
+    p.next.prev = p.prev;
+    p.prev.next = p.next;
 
-      if (p.prevZ) p.prevZ.nextZ = p.nextZ;
-      if (p.nextZ) p.nextZ.prevZ = p.prevZ;
+    if (p.prevZ) p.prevZ.nextZ = p.nextZ;
+    if (p.nextZ) p.nextZ.prevZ = p.prevZ;
   }
 
   function Node(i, x, y) {
-      // vertex index in coordinates array
-      this.i = i;
+    // vertex index in coordinates array
+    this.i = i;
 
-      // vertex coordinates
-      this.x = x;
-      this.y = y;
+    // vertex coordinates
+    this.x = x;
+    this.y = y;
 
-      // previous and next vertex nodes in a polygon ring
-      this.prev = null;
-      this.next = null;
+    // previous and next vertex nodes in a polygon ring
+    this.prev = null;
+    this.next = null;
 
-      // z-order curve value
-      this.z = 0;
+    // z-order curve value
+    this.z = 0;
 
-      // previous and next nodes in z-order
-      this.prevZ = null;
-      this.nextZ = null;
+    // previous and next nodes in z-order
+    this.prevZ = null;
+    this.nextZ = null;
 
-      // indicates whether this is a steiner point
-      this.steiner = false;
+    // indicates whether this is a steiner point
+    this.steiner = false;
   }
 
   // return a percentage difference between the polygon area and its triangulation area;
   // used to verify correctness of triangulation
   earcut.deviation = function (data, holeIndices, dim, triangles) {
-      var hasHoles = holeIndices && holeIndices.length;
-      var outerLen = hasHoles ? holeIndices[0] * dim : data.length;
+    var hasHoles = holeIndices && holeIndices.length;
+    var outerLen = hasHoles ? holeIndices[0] * dim : data.length;
 
-      var polygonArea = Math.abs(signedArea(data, 0, outerLen, dim));
-      if (hasHoles) {
-          for (var i = 0, len = holeIndices.length; i < len; i++) {
-              var start = holeIndices[i] * dim;
-              var end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
-              polygonArea -= Math.abs(signedArea(data, start, end, dim));
-          }
+    var polygonArea = Math.abs(signedArea(data, 0, outerLen, dim));
+    if (hasHoles) {
+      for (var i = 0, len = holeIndices.length; i < len; i++) {
+        var start = holeIndices[i] * dim;
+        var end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
+        polygonArea -= Math.abs(signedArea(data, start, end, dim));
       }
+    }
 
-      var trianglesArea = 0;
-      for (i = 0; i < triangles.length; i += 3) {
-          var a = triangles[i] * dim;
-          var b = triangles[i + 1] * dim;
-          var c = triangles[i + 2] * dim;
-          trianglesArea += Math.abs(
-              (data[a] - data[c]) * (data[b + 1] - data[a + 1]) -
-              (data[a] - data[b]) * (data[c + 1] - data[a + 1]));
-      }
+    var trianglesArea = 0;
+    for (i = 0; i < triangles.length; i += 3) {
+      var a = triangles[i] * dim;
+      var b = triangles[i + 1] * dim;
+      var c = triangles[i + 2] * dim;
+      trianglesArea += Math.abs(
+        (data[a] - data[c]) * (data[b + 1] - data[a + 1]) -
+        (data[a] - data[b]) * (data[c + 1] - data[a + 1]));
+    }
 
-      return polygonArea === 0 && trianglesArea === 0 ? 0 :
-          Math.abs((trianglesArea - polygonArea) / polygonArea);
+    return polygonArea === 0 && trianglesArea === 0 ? 0 :
+      Math.abs((trianglesArea - polygonArea) / polygonArea);
   };
 
   function signedArea(data, start, end, dim) {
-      var sum = 0;
-      for (var i = start, j = end - dim; i < end; i += dim) {
-          sum += (data[j] - data[i]) * (data[i + 1] + data[j + 1]);
-          j = i;
-      }
-      return sum;
+    var sum = 0;
+    for (var i = start, j = end - dim; i < end; i += dim) {
+      sum += (data[j] - data[i]) * (data[i + 1] + data[j + 1]);
+      j = i;
+    }
+    return sum;
   }
 
   // turn a polygon in a multi-dimensional array form (e.g. as in GeoJSON) into a form Earcut accepts
   earcut.flatten = function (data) {
-      var dim = data[0][0].length,
-          result = {vertices: [], holes: [], dimensions: dim},
-          holeIndex = 0;
+    var dim = data[0][0].length,
+      result = { vertices: [], holes: [], dimensions: dim },
+      holeIndex = 0;
 
-      for (var i = 0; i < data.length; i++) {
-          for (var j = 0; j < data[i].length; j++) {
-              for (var d = 0; d < dim; d++) result.vertices.push(data[i][j][d]);
-          }
-          if (i > 0) {
-              holeIndex += data[i - 1].length;
-              result.holes.push(holeIndex);
-          }
+    for (var i = 0; i < data.length; i++) {
+      for (var j = 0; j < data[i].length; j++) {
+        for (var d = 0; d < dim; d++) result.vertices.push(data[i][j][d]);
       }
-      return result;
+      if (i > 0) {
+        holeIndex += data[i - 1].length;
+        result.holes.push(holeIndex);
+      }
+    }
+    return result;
   };
   earcut_1.default = _default;
 
   var punycode = createCommonjsModule(function (module, exports) {
-  /*! https://mths.be/punycode v1.3.2 by @mathias */
-  ;(function(root) {
+    /*! https://mths.be/punycode v1.3.2 by @mathias */
+    ; (function (root) {
 
-  	/** Detect free variables */
-  	var freeExports = 'object' == 'object' && exports &&
-  		!exports.nodeType && exports;
-  	var freeModule = 'object' == 'object' && module &&
-  		!module.nodeType && module;
-  	var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal;
-  	if (
-  		freeGlobal.global === freeGlobal ||
-  		freeGlobal.window === freeGlobal ||
-  		freeGlobal.self === freeGlobal
-  	) {
-  		root = freeGlobal;
-  	}
+      /** Detect free variables */
+      var freeExports = 'object' == 'object' && exports &&
+        !exports.nodeType && exports;
+      var freeModule = 'object' == 'object' && module &&
+        !module.nodeType && module;
+      var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal;
+      if (
+        freeGlobal.global === freeGlobal ||
+        freeGlobal.window === freeGlobal ||
+        freeGlobal.self === freeGlobal
+      ) {
+        root = freeGlobal;
+      }
 
-  	/**
-  	 * The `punycode` object.
-  	 * @name punycode
-  	 * @type Object
-  	 */
-  	var punycode,
+      /**
+       * The `punycode` object.
+       * @name punycode
+       * @type Object
+       */
+      var punycode,
 
-  	/** Highest positive signed 32-bit float value */
-  	maxInt = 2147483647, // aka. 0x7FFFFFFF or 2^31-1
+        /** Highest positive signed 32-bit float value */
+        maxInt = 2147483647, // aka. 0x7FFFFFFF or 2^31-1
 
-  	/** Bootstring parameters */
-  	base = 36,
-  	tMin = 1,
-  	tMax = 26,
-  	skew = 38,
-  	damp = 700,
-  	initialBias = 72,
-  	initialN = 128, // 0x80
-  	delimiter = '-', // '\x2D'
+        /** Bootstring parameters */
+        base = 36,
+        tMin = 1,
+        tMax = 26,
+        skew = 38,
+        damp = 700,
+        initialBias = 72,
+        initialN = 128, // 0x80
+        delimiter = '-', // '\x2D'
 
-  	/** Regular expressions */
-  	regexPunycode = /^xn--/,
-  	regexNonASCII = /[^\x20-\x7E]/, // unprintable ASCII chars + non-ASCII chars
-  	regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g, // RFC 3490 separators
+        /** Regular expressions */
+        regexPunycode = /^xn--/,
+        regexNonASCII = /[^\x20-\x7E]/, // unprintable ASCII chars + non-ASCII chars
+        regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g, // RFC 3490 separators
 
-  	/** Error messages */
-  	errors = {
-  		'overflow': 'Overflow: input needs wider integers to process',
-  		'not-basic': 'Illegal input >= 0x80 (not a basic code point)',
-  		'invalid-input': 'Invalid input'
-  	},
+        /** Error messages */
+        errors = {
+          'overflow': 'Overflow: input needs wider integers to process',
+          'not-basic': 'Illegal input >= 0x80 (not a basic code point)',
+          'invalid-input': 'Invalid input'
+        },
 
-  	/** Convenience shortcuts */
-  	baseMinusTMin = base - tMin,
-  	floor = Math.floor,
-  	stringFromCharCode = String.fromCharCode,
+        /** Convenience shortcuts */
+        baseMinusTMin = base - tMin,
+        floor = Math.floor,
+        stringFromCharCode = String.fromCharCode,
 
-  	/** Temporary variable */
-  	key;
+        /** Temporary variable */
+        key;
 
-  	/*--------------------------------------------------------------------------*/
+      /*--------------------------------------------------------------------------*/
 
-  	/**
-  	 * A generic error utility function.
-  	 * @private
-  	 * @param {String} type The error type.
-  	 * @returns {Error} Throws a `RangeError` with the applicable error message.
-  	 */
-  	function error(type) {
-  		throw RangeError(errors[type]);
-  	}
+      /**
+       * A generic error utility function.
+       * @private
+       * @param {String} type The error type.
+       * @returns {Error} Throws a `RangeError` with the applicable error message.
+       */
+      function error(type) {
+        throw RangeError(errors[type]);
+      }
 
-  	/**
-  	 * A generic `Array#map` utility function.
-  	 * @private
-  	 * @param {Array} array The array to iterate over.
-  	 * @param {Function} callback The function that gets called for every array
-  	 * item.
-  	 * @returns {Array} A new array of values returned by the callback function.
-  	 */
-  	function map(array, fn) {
-  		var length = array.length;
-  		var result = [];
-  		while (length--) {
-  			result[length] = fn(array[length]);
-  		}
-  		return result;
-  	}
+      /**
+       * A generic `Array#map` utility function.
+       * @private
+       * @param {Array} array The array to iterate over.
+       * @param {Function} callback The function that gets called for every array
+       * item.
+       * @returns {Array} A new array of values returned by the callback function.
+       */
+      function map(array, fn) {
+        var length = array.length;
+        var result = [];
+        while (length--) {
+          result[length] = fn(array[length]);
+        }
+        return result;
+      }
 
-  	/**
-  	 * A simple `Array#map`-like wrapper to work with domain name strings or email
-  	 * addresses.
-  	 * @private
-  	 * @param {String} domain The domain name or email address.
-  	 * @param {Function} callback The function that gets called for every
-  	 * character.
-  	 * @returns {Array} A new string of characters returned by the callback
-  	 * function.
-  	 */
-  	function mapDomain(string, fn) {
-  		var parts = string.split('@');
-  		var result = '';
-  		if (parts.length > 1) {
-  			// In email addresses, only the domain name should be punycoded. Leave
-  			// the local part (i.e. everything up to `@`) intact.
-  			result = parts[0] + '@';
-  			string = parts[1];
-  		}
-  		// Avoid `split(regex)` for IE8 compatibility. See #17.
-  		string = string.replace(regexSeparators, '\x2E');
-  		var labels = string.split('.');
-  		var encoded = map(labels, fn).join('.');
-  		return result + encoded;
-  	}
+      /**
+       * A simple `Array#map`-like wrapper to work with domain name strings or email
+       * addresses.
+       * @private
+       * @param {String} domain The domain name or email address.
+       * @param {Function} callback The function that gets called for every
+       * character.
+       * @returns {Array} A new string of characters returned by the callback
+       * function.
+       */
+      function mapDomain(string, fn) {
+        var parts = string.split('@');
+        var result = '';
+        if (parts.length > 1) {
+          // In email addresses, only the domain name should be punycoded. Leave
+          // the local part (i.e. everything up to `@`) intact.
+          result = parts[0] + '@';
+          string = parts[1];
+        }
+        // Avoid `split(regex)` for IE8 compatibility. See #17.
+        string = string.replace(regexSeparators, '\x2E');
+        var labels = string.split('.');
+        var encoded = map(labels, fn).join('.');
+        return result + encoded;
+      }
 
-  	/**
-  	 * Creates an array containing the numeric code points of each Unicode
-  	 * character in the string. While JavaScript uses UCS-2 internally,
-  	 * this function will convert a pair of surrogate halves (each of which
-  	 * UCS-2 exposes as separate characters) into a single code point,
-  	 * matching UTF-16.
-  	 * @see `punycode.ucs2.encode`
-  	 * @see <https://mathiasbynens.be/notes/javascript-encoding>
-  	 * @memberOf punycode.ucs2
-  	 * @name decode
-  	 * @param {String} string The Unicode input string (UCS-2).
-  	 * @returns {Array} The new array of code points.
-  	 */
-  	function ucs2decode(string) {
-  		var output = [],
-  		    counter = 0,
-  		    length = string.length,
-  		    value,
-  		    extra;
-  		while (counter < length) {
-  			value = string.charCodeAt(counter++);
-  			if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
-  				// high surrogate, and there is a next character
-  				extra = string.charCodeAt(counter++);
-  				if ((extra & 0xFC00) == 0xDC00) { // low surrogate
-  					output.push(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
-  				} else {
-  					// unmatched surrogate; only append this code unit, in case the next
-  					// code unit is the high surrogate of a surrogate pair
-  					output.push(value);
-  					counter--;
-  				}
-  			} else {
-  				output.push(value);
-  			}
-  		}
-  		return output;
-  	}
+      /**
+       * Creates an array containing the numeric code points of each Unicode
+       * character in the string. While JavaScript uses UCS-2 internally,
+       * this function will convert a pair of surrogate halves (each of which
+       * UCS-2 exposes as separate characters) into a single code point,
+       * matching UTF-16.
+       * @see `punycode.ucs2.encode`
+       * @see <https://mathiasbynens.be/notes/javascript-encoding>
+       * @memberOf punycode.ucs2
+       * @name decode
+       * @param {String} string The Unicode input string (UCS-2).
+       * @returns {Array} The new array of code points.
+       */
+      function ucs2decode(string) {
+        var output = [],
+          counter = 0,
+          length = string.length,
+          value,
+          extra;
+        while (counter < length) {
+          value = string.charCodeAt(counter++);
+          if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
+            // high surrogate, and there is a next character
+            extra = string.charCodeAt(counter++);
+            if ((extra & 0xFC00) == 0xDC00) { // low surrogate
+              output.push(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
+            } else {
+              // unmatched surrogate; only append this code unit, in case the next
+              // code unit is the high surrogate of a surrogate pair
+              output.push(value);
+              counter--;
+            }
+          } else {
+            output.push(value);
+          }
+        }
+        return output;
+      }
 
-  	/**
-  	 * Creates a string based on an array of numeric code points.
-  	 * @see `punycode.ucs2.decode`
-  	 * @memberOf punycode.ucs2
-  	 * @name encode
-  	 * @param {Array} codePoints The array of numeric code points.
-  	 * @returns {String} The new Unicode string (UCS-2).
-  	 */
-  	function ucs2encode(array) {
-  		return map(array, function(value) {
-  			var output = '';
-  			if (value > 0xFFFF) {
-  				value -= 0x10000;
-  				output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
-  				value = 0xDC00 | value & 0x3FF;
-  			}
-  			output += stringFromCharCode(value);
-  			return output;
-  		}).join('');
-  	}
+      /**
+       * Creates a string based on an array of numeric code points.
+       * @see `punycode.ucs2.decode`
+       * @memberOf punycode.ucs2
+       * @name encode
+       * @param {Array} codePoints The array of numeric code points.
+       * @returns {String} The new Unicode string (UCS-2).
+       */
+      function ucs2encode(array) {
+        return map(array, function (value) {
+          var output = '';
+          if (value > 0xFFFF) {
+            value -= 0x10000;
+            output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
+            value = 0xDC00 | value & 0x3FF;
+          }
+          output += stringFromCharCode(value);
+          return output;
+        }).join('');
+      }
 
-  	/**
-  	 * Converts a basic code point into a digit/integer.
-  	 * @see `digitToBasic()`
-  	 * @private
-  	 * @param {Number} codePoint The basic numeric code point value.
-  	 * @returns {Number} The numeric value of a basic code point (for use in
-  	 * representing integers) in the range `0` to `base - 1`, or `base` if
-  	 * the code point does not represent a value.
-  	 */
-  	function basicToDigit(codePoint) {
-  		if (codePoint - 48 < 10) {
-  			return codePoint - 22;
-  		}
-  		if (codePoint - 65 < 26) {
-  			return codePoint - 65;
-  		}
-  		if (codePoint - 97 < 26) {
-  			return codePoint - 97;
-  		}
-  		return base;
-  	}
+      /**
+       * Converts a basic code point into a digit/integer.
+       * @see `digitToBasic()`
+       * @private
+       * @param {Number} codePoint The basic numeric code point value.
+       * @returns {Number} The numeric value of a basic code point (for use in
+       * representing integers) in the range `0` to `base - 1`, or `base` if
+       * the code point does not represent a value.
+       */
+      function basicToDigit(codePoint) {
+        if (codePoint - 48 < 10) {
+          return codePoint - 22;
+        }
+        if (codePoint - 65 < 26) {
+          return codePoint - 65;
+        }
+        if (codePoint - 97 < 26) {
+          return codePoint - 97;
+        }
+        return base;
+      }
 
-  	/**
-  	 * Converts a digit/integer into a basic code point.
-  	 * @see `basicToDigit()`
-  	 * @private
-  	 * @param {Number} digit The numeric value of a basic code point.
-  	 * @returns {Number} The basic code point whose value (when used for
-  	 * representing integers) is `digit`, which needs to be in the range
-  	 * `0` to `base - 1`. If `flag` is non-zero, the uppercase form is
-  	 * used; else, the lowercase form is used. The behavior is undefined
-  	 * if `flag` is non-zero and `digit` has no uppercase form.
-  	 */
-  	function digitToBasic(digit, flag) {
-  		//  0..25 map to ASCII a..z or A..Z
-  		// 26..35 map to ASCII 0..9
-  		return digit + 22 + 75 * (digit < 26) - ((flag != 0) << 5);
-  	}
+      /**
+       * Converts a digit/integer into a basic code point.
+       * @see `basicToDigit()`
+       * @private
+       * @param {Number} digit The numeric value of a basic code point.
+       * @returns {Number} The basic code point whose value (when used for
+       * representing integers) is `digit`, which needs to be in the range
+       * `0` to `base - 1`. If `flag` is non-zero, the uppercase form is
+       * used; else, the lowercase form is used. The behavior is undefined
+       * if `flag` is non-zero and `digit` has no uppercase form.
+       */
+      function digitToBasic(digit, flag) {
+        //  0..25 map to ASCII a..z or A..Z
+        // 26..35 map to ASCII 0..9
+        return digit + 22 + 75 * (digit < 26) - ((flag != 0) << 5);
+      }
 
-  	/**
-  	 * Bias adaptation function as per section 3.4 of RFC 3492.
-  	 * http://tools.ietf.org/html/rfc3492#section-3.4
-  	 * @private
-  	 */
-  	function adapt(delta, numPoints, firstTime) {
-  		var k = 0;
-  		delta = firstTime ? floor(delta / damp) : delta >> 1;
-  		delta += floor(delta / numPoints);
-  		for (/* no initialization */; delta > baseMinusTMin * tMax >> 1; k += base) {
-  			delta = floor(delta / baseMinusTMin);
-  		}
-  		return floor(k + (baseMinusTMin + 1) * delta / (delta + skew));
-  	}
+      /**
+       * Bias adaptation function as per section 3.4 of RFC 3492.
+       * http://tools.ietf.org/html/rfc3492#section-3.4
+       * @private
+       */
+      function adapt(delta, numPoints, firstTime) {
+        var k = 0;
+        delta = firstTime ? floor(delta / damp) : delta >> 1;
+        delta += floor(delta / numPoints);
+        for (/* no initialization */; delta > baseMinusTMin * tMax >> 1; k += base) {
+          delta = floor(delta / baseMinusTMin);
+        }
+        return floor(k + (baseMinusTMin + 1) * delta / (delta + skew));
+      }
 
-  	/**
-  	 * Converts a Punycode string of ASCII-only symbols to a string of Unicode
-  	 * symbols.
-  	 * @memberOf punycode
-  	 * @param {String} input The Punycode string of ASCII-only symbols.
-  	 * @returns {String} The resulting string of Unicode symbols.
-  	 */
-  	function decode(input) {
-  		// Don't use UCS-2
-  		var output = [],
-  		    inputLength = input.length,
-  		    out,
-  		    i = 0,
-  		    n = initialN,
-  		    bias = initialBias,
-  		    basic,
-  		    j,
-  		    index,
-  		    oldi,
-  		    w,
-  		    k,
-  		    digit,
-  		    t,
-  		    /** Cached calculation results */
-  		    baseMinusT;
+      /**
+       * Converts a Punycode string of ASCII-only symbols to a string of Unicode
+       * symbols.
+       * @memberOf punycode
+       * @param {String} input The Punycode string of ASCII-only symbols.
+       * @returns {String} The resulting string of Unicode symbols.
+       */
+      function decode(input) {
+        // Don't use UCS-2
+        var output = [],
+          inputLength = input.length,
+          out,
+          i = 0,
+          n = initialN,
+          bias = initialBias,
+          basic,
+          j,
+          index,
+          oldi,
+          w,
+          k,
+          digit,
+          t,
+          /** Cached calculation results */
+          baseMinusT;
 
-  		// Handle the basic code points: let `basic` be the number of input code
-  		// points before the last delimiter, or `0` if there is none, then copy
-  		// the first basic code points to the output.
+        // Handle the basic code points: let `basic` be the number of input code
+        // points before the last delimiter, or `0` if there is none, then copy
+        // the first basic code points to the output.
 
-  		basic = input.lastIndexOf(delimiter);
-  		if (basic < 0) {
-  			basic = 0;
-  		}
+        basic = input.lastIndexOf(delimiter);
+        if (basic < 0) {
+          basic = 0;
+        }
 
-  		for (j = 0; j < basic; ++j) {
-  			// if it's not a basic code point
-  			if (input.charCodeAt(j) >= 0x80) {
-  				error('not-basic');
-  			}
-  			output.push(input.charCodeAt(j));
-  		}
+        for (j = 0; j < basic; ++j) {
+          // if it's not a basic code point
+          if (input.charCodeAt(j) >= 0x80) {
+            error('not-basic');
+          }
+          output.push(input.charCodeAt(j));
+        }
 
-  		// Main decoding loop: start just after the last delimiter if any basic code
-  		// points were copied; start at the beginning otherwise.
+        // Main decoding loop: start just after the last delimiter if any basic code
+        // points were copied; start at the beginning otherwise.
 
-  		for (index = basic > 0 ? basic + 1 : 0; index < inputLength; /* no final expression */) {
+        for (index = basic > 0 ? basic + 1 : 0; index < inputLength; /* no final expression */) {
 
-  			// `index` is the index of the next character to be consumed.
-  			// Decode a generalized variable-length integer into `delta`,
-  			// which gets added to `i`. The overflow checking is easier
-  			// if we increase `i` as we go, then subtract off its starting
-  			// value at the end to obtain `delta`.
-  			for (oldi = i, w = 1, k = base; /* no condition */; k += base) {
+          // `index` is the index of the next character to be consumed.
+          // Decode a generalized variable-length integer into `delta`,
+          // which gets added to `i`. The overflow checking is easier
+          // if we increase `i` as we go, then subtract off its starting
+          // value at the end to obtain `delta`.
+          for (oldi = i, w = 1, k = base; /* no condition */; k += base) {
 
-  				if (index >= inputLength) {
-  					error('invalid-input');
-  				}
+            if (index >= inputLength) {
+              error('invalid-input');
+            }
 
-  				digit = basicToDigit(input.charCodeAt(index++));
+            digit = basicToDigit(input.charCodeAt(index++));
 
-  				if (digit >= base || digit > floor((maxInt - i) / w)) {
-  					error('overflow');
-  				}
+            if (digit >= base || digit > floor((maxInt - i) / w)) {
+              error('overflow');
+            }
 
-  				i += digit * w;
-  				t = k <= bias ? tMin : (k >= bias + tMax ? tMax : k - bias);
+            i += digit * w;
+            t = k <= bias ? tMin : (k >= bias + tMax ? tMax : k - bias);
 
-  				if (digit < t) {
-  					break;
-  				}
+            if (digit < t) {
+              break;
+            }
 
-  				baseMinusT = base - t;
-  				if (w > floor(maxInt / baseMinusT)) {
-  					error('overflow');
-  				}
+            baseMinusT = base - t;
+            if (w > floor(maxInt / baseMinusT)) {
+              error('overflow');
+            }
 
-  				w *= baseMinusT;
+            w *= baseMinusT;
 
-  			}
+          }
 
-  			out = output.length + 1;
-  			bias = adapt(i - oldi, out, oldi == 0);
+          out = output.length + 1;
+          bias = adapt(i - oldi, out, oldi == 0);
 
-  			// `i` was supposed to wrap around from `out` to `0`,
-  			// incrementing `n` each time, so we'll fix that now:
-  			if (floor(i / out) > maxInt - n) {
-  				error('overflow');
-  			}
+          // `i` was supposed to wrap around from `out` to `0`,
+          // incrementing `n` each time, so we'll fix that now:
+          if (floor(i / out) > maxInt - n) {
+            error('overflow');
+          }
 
-  			n += floor(i / out);
-  			i %= out;
+          n += floor(i / out);
+          i %= out;
 
-  			// Insert `n` at position `i` of the output
-  			output.splice(i++, 0, n);
+          // Insert `n` at position `i` of the output
+          output.splice(i++, 0, n);
 
-  		}
+        }
 
-  		return ucs2encode(output);
-  	}
+        return ucs2encode(output);
+      }
 
-  	/**
-  	 * Converts a string of Unicode symbols (e.g. a domain name label) to a
-  	 * Punycode string of ASCII-only symbols.
-  	 * @memberOf punycode
-  	 * @param {String} input The string of Unicode symbols.
-  	 * @returns {String} The resulting Punycode string of ASCII-only symbols.
-  	 */
-  	function encode(input) {
-  		var n,
-  		    delta,
-  		    handledCPCount,
-  		    basicLength,
-  		    bias,
-  		    j,
-  		    m,
-  		    q,
-  		    k,
-  		    t,
-  		    currentValue,
-  		    output = [],
-  		    /** `inputLength` will hold the number of code points in `input`. */
-  		    inputLength,
-  		    /** Cached calculation results */
-  		    handledCPCountPlusOne,
-  		    baseMinusT,
-  		    qMinusT;
+      /**
+       * Converts a string of Unicode symbols (e.g. a domain name label) to a
+       * Punycode string of ASCII-only symbols.
+       * @memberOf punycode
+       * @param {String} input The string of Unicode symbols.
+       * @returns {String} The resulting Punycode string of ASCII-only symbols.
+       */
+      function encode(input) {
+        var n,
+          delta,
+          handledCPCount,
+          basicLength,
+          bias,
+          j,
+          m,
+          q,
+          k,
+          t,
+          currentValue,
+          output = [],
+          /** `inputLength` will hold the number of code points in `input`. */
+          inputLength,
+          /** Cached calculation results */
+          handledCPCountPlusOne,
+          baseMinusT,
+          qMinusT;
 
-  		// Convert the input in UCS-2 to Unicode
-  		input = ucs2decode(input);
+        // Convert the input in UCS-2 to Unicode
+        input = ucs2decode(input);
 
-  		// Cache the length
-  		inputLength = input.length;
+        // Cache the length
+        inputLength = input.length;
 
-  		// Initialize the state
-  		n = initialN;
-  		delta = 0;
-  		bias = initialBias;
+        // Initialize the state
+        n = initialN;
+        delta = 0;
+        bias = initialBias;
 
-  		// Handle the basic code points
-  		for (j = 0; j < inputLength; ++j) {
-  			currentValue = input[j];
-  			if (currentValue < 0x80) {
-  				output.push(stringFromCharCode(currentValue));
-  			}
-  		}
+        // Handle the basic code points
+        for (j = 0; j < inputLength; ++j) {
+          currentValue = input[j];
+          if (currentValue < 0x80) {
+            output.push(stringFromCharCode(currentValue));
+          }
+        }
 
-  		handledCPCount = basicLength = output.length;
+        handledCPCount = basicLength = output.length;
 
-  		// `handledCPCount` is the number of code points that have been handled;
-  		// `basicLength` is the number of basic code points.
+        // `handledCPCount` is the number of code points that have been handled;
+        // `basicLength` is the number of basic code points.
 
-  		// Finish the basic string - if it is not empty - with a delimiter
-  		if (basicLength) {
-  			output.push(delimiter);
-  		}
+        // Finish the basic string - if it is not empty - with a delimiter
+        if (basicLength) {
+          output.push(delimiter);
+        }
 
-  		// Main encoding loop:
-  		while (handledCPCount < inputLength) {
+        // Main encoding loop:
+        while (handledCPCount < inputLength) {
 
-  			// All non-basic code points < n have been handled already. Find the next
-  			// larger one:
-  			for (m = maxInt, j = 0; j < inputLength; ++j) {
-  				currentValue = input[j];
-  				if (currentValue >= n && currentValue < m) {
-  					m = currentValue;
-  				}
-  			}
+          // All non-basic code points < n have been handled already. Find the next
+          // larger one:
+          for (m = maxInt, j = 0; j < inputLength; ++j) {
+            currentValue = input[j];
+            if (currentValue >= n && currentValue < m) {
+              m = currentValue;
+            }
+          }
 
-  			// Increase `delta` enough to advance the decoder's <n,i> state to <m,0>,
-  			// but guard against overflow
-  			handledCPCountPlusOne = handledCPCount + 1;
-  			if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
-  				error('overflow');
-  			}
+          // Increase `delta` enough to advance the decoder's <n,i> state to <m,0>,
+          // but guard against overflow
+          handledCPCountPlusOne = handledCPCount + 1;
+          if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
+            error('overflow');
+          }
 
-  			delta += (m - n) * handledCPCountPlusOne;
-  			n = m;
+          delta += (m - n) * handledCPCountPlusOne;
+          n = m;
 
-  			for (j = 0; j < inputLength; ++j) {
-  				currentValue = input[j];
+          for (j = 0; j < inputLength; ++j) {
+            currentValue = input[j];
 
-  				if (currentValue < n && ++delta > maxInt) {
-  					error('overflow');
-  				}
+            if (currentValue < n && ++delta > maxInt) {
+              error('overflow');
+            }
 
-  				if (currentValue == n) {
-  					// Represent delta as a generalized variable-length integer
-  					for (q = delta, k = base; /* no condition */; k += base) {
-  						t = k <= bias ? tMin : (k >= bias + tMax ? tMax : k - bias);
-  						if (q < t) {
-  							break;
-  						}
-  						qMinusT = q - t;
-  						baseMinusT = base - t;
-  						output.push(
-  							stringFromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0))
-  						);
-  						q = floor(qMinusT / baseMinusT);
-  					}
+            if (currentValue == n) {
+              // Represent delta as a generalized variable-length integer
+              for (q = delta, k = base; /* no condition */; k += base) {
+                t = k <= bias ? tMin : (k >= bias + tMax ? tMax : k - bias);
+                if (q < t) {
+                  break;
+                }
+                qMinusT = q - t;
+                baseMinusT = base - t;
+                output.push(
+                  stringFromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0))
+                );
+                q = floor(qMinusT / baseMinusT);
+              }
 
-  					output.push(stringFromCharCode(digitToBasic(q, 0)));
-  					bias = adapt(delta, handledCPCountPlusOne, handledCPCount == basicLength);
-  					delta = 0;
-  					++handledCPCount;
-  				}
-  			}
+              output.push(stringFromCharCode(digitToBasic(q, 0)));
+              bias = adapt(delta, handledCPCountPlusOne, handledCPCount == basicLength);
+              delta = 0;
+              ++handledCPCount;
+            }
+          }
 
-  			++delta;
-  			++n;
+          ++delta;
+          ++n;
 
-  		}
-  		return output.join('');
-  	}
+        }
+        return output.join('');
+      }
 
-  	/**
-  	 * Converts a Punycode string representing a domain name or an email address
-  	 * to Unicode. Only the Punycoded parts of the input will be converted, i.e.
-  	 * it doesn't matter if you call it on a string that has already been
-  	 * converted to Unicode.
-  	 * @memberOf punycode
-  	 * @param {String} input The Punycoded domain name or email address to
-  	 * convert to Unicode.
-  	 * @returns {String} The Unicode representation of the given Punycode
-  	 * string.
-  	 */
-  	function toUnicode(input) {
-  		return mapDomain(input, function(string) {
-  			return regexPunycode.test(string)
-  				? decode(string.slice(4).toLowerCase())
-  				: string;
-  		});
-  	}
+      /**
+       * Converts a Punycode string representing a domain name or an email address
+       * to Unicode. Only the Punycoded parts of the input will be converted, i.e.
+       * it doesn't matter if you call it on a string that has already been
+       * converted to Unicode.
+       * @memberOf punycode
+       * @param {String} input The Punycoded domain name or email address to
+       * convert to Unicode.
+       * @returns {String} The Unicode representation of the given Punycode
+       * string.
+       */
+      function toUnicode(input) {
+        return mapDomain(input, function (string) {
+          return regexPunycode.test(string)
+            ? decode(string.slice(4).toLowerCase())
+            : string;
+        });
+      }
 
-  	/**
-  	 * Converts a Unicode string representing a domain name or an email address to
-  	 * Punycode. Only the non-ASCII parts of the domain name will be converted,
-  	 * i.e. it doesn't matter if you call it with a domain that's already in
-  	 * ASCII.
-  	 * @memberOf punycode
-  	 * @param {String} input The domain name or email address to convert, as a
-  	 * Unicode string.
-  	 * @returns {String} The Punycode representation of the given domain name or
-  	 * email address.
-  	 */
-  	function toASCII(input) {
-  		return mapDomain(input, function(string) {
-  			return regexNonASCII.test(string)
-  				? 'xn--' + encode(string)
-  				: string;
-  		});
-  	}
+      /**
+       * Converts a Unicode string representing a domain name or an email address to
+       * Punycode. Only the non-ASCII parts of the domain name will be converted,
+       * i.e. it doesn't matter if you call it with a domain that's already in
+       * ASCII.
+       * @memberOf punycode
+       * @param {String} input The domain name or email address to convert, as a
+       * Unicode string.
+       * @returns {String} The Punycode representation of the given domain name or
+       * email address.
+       */
+      function toASCII(input) {
+        return mapDomain(input, function (string) {
+          return regexNonASCII.test(string)
+            ? 'xn--' + encode(string)
+            : string;
+        });
+      }
 
-  	/*--------------------------------------------------------------------------*/
+      /*--------------------------------------------------------------------------*/
 
-  	/** Define the public API */
-  	punycode = {
-  		/**
-  		 * A string representing the current Punycode.js version number.
-  		 * @memberOf punycode
-  		 * @type String
-  		 */
-  		'version': '1.3.2',
-  		/**
-  		 * An object of methods to convert from JavaScript's internal character
-  		 * representation (UCS-2) to Unicode code points, and back.
-  		 * @see <https://mathiasbynens.be/notes/javascript-encoding>
-  		 * @memberOf punycode
-  		 * @type Object
-  		 */
-  		'ucs2': {
-  			'decode': ucs2decode,
-  			'encode': ucs2encode
-  		},
-  		'decode': decode,
-  		'encode': encode,
-  		'toASCII': toASCII,
-  		'toUnicode': toUnicode
-  	};
+      /** Define the public API */
+      punycode = {
+        /**
+         * A string representing the current Punycode.js version number.
+         * @memberOf punycode
+         * @type String
+         */
+        'version': '1.3.2',
+        /**
+         * An object of methods to convert from JavaScript's internal character
+         * representation (UCS-2) to Unicode code points, and back.
+         * @see <https://mathiasbynens.be/notes/javascript-encoding>
+         * @memberOf punycode
+         * @type Object
+         */
+        'ucs2': {
+          'decode': ucs2decode,
+          'encode': ucs2encode
+        },
+        'decode': decode,
+        'encode': encode,
+        'toASCII': toASCII,
+        'toUnicode': toUnicode
+      };
 
-  	/** Expose `punycode` */
-  	// Some AMD build optimizers, like r.js, check for specific condition patterns
-  	// like the following:
-  	if (
-  		typeof undefined == 'function' &&
-  		typeof undefined.amd == 'object' &&
-  		undefined.amd
-  	) {
-  		undefined('punycode', function() {
-  			return punycode;
-  		});
-  	} else if (freeExports && freeModule) {
-  		if (module.exports == freeExports) { // in Node.js or RingoJS v0.8.0+
-  			freeModule.exports = punycode;
-  		} else { // in Narwhal or RingoJS v0.7.0-
-  			for (key in punycode) {
-  				punycode.hasOwnProperty(key) && (freeExports[key] = punycode[key]);
-  			}
-  		}
-  	} else { // in Rhino or a web browser
-  		root.punycode = punycode;
-  	}
+      /** Expose `punycode` */
+      // Some AMD build optimizers, like r.js, check for specific condition patterns
+      // like the following:
+      if (
+        typeof undefined == 'function' &&
+        typeof undefined.amd == 'object' &&
+        undefined.amd
+      ) {
+        undefined('punycode', function () {
+          return punycode;
+        });
+      } else if (freeExports && freeModule) {
+        if (module.exports == freeExports) { // in Node.js or RingoJS v0.8.0+
+          freeModule.exports = punycode;
+        } else { // in Narwhal or RingoJS v0.7.0-
+          for (key in punycode) {
+            punycode.hasOwnProperty(key) && (freeExports[key] = punycode[key]);
+          }
+        }
+      } else { // in Rhino or a web browser
+        root.punycode = punycode;
+      }
 
-  }(commonjsGlobal));
+    }(commonjsGlobal));
   });
 
   'use strict';
 
   var util = {
-    isString: function(arg) {
-      return typeof(arg) === 'string';
+    isString: function (arg) {
+      return typeof (arg) === 'string';
     },
-    isObject: function(arg) {
-      return typeof(arg) === 'object' && arg !== null;
+    isObject: function (arg) {
+      return typeof (arg) === 'object' && arg !== null;
     },
-    isNull: function(arg) {
+    isNull: function (arg) {
       return arg === null;
     },
-    isNullOrUndefined: function(arg) {
+    isNullOrUndefined: function (arg) {
       return arg == null;
     }
   };
@@ -3313,7 +3313,7 @@ var PIXI = (function (exports) {
     return Object.prototype.hasOwnProperty.call(obj, prop);
   }
 
-  var decode = function(qs, sep, eq, options) {
+  var decode = function (qs, sep, eq, options) {
     sep = sep || '&';
     eq = eq || '=';
     var obj = {};
@@ -3338,8 +3338,8 @@ var PIXI = (function (exports) {
 
     for (var i = 0; i < len; ++i) {
       var x = qs[i].replace(regexp, '%20'),
-          idx = x.indexOf(eq),
-          kstr, vstr, k, v;
+        idx = x.indexOf(eq),
+        kstr, vstr, k, v;
 
       if (idx >= 0) {
         kstr = x.substr(0, idx);
@@ -3387,7 +3387,7 @@ var PIXI = (function (exports) {
 
   'use strict';
 
-  var stringifyPrimitive = function(v) {
+  var stringifyPrimitive = function (v) {
     switch (typeof v) {
       case 'string':
         return v;
@@ -3403,7 +3403,7 @@ var PIXI = (function (exports) {
     }
   };
 
-  var encode = function(obj, sep, eq, name) {
+  var encode = function (obj, sep, eq, name) {
     sep = sep || '&';
     eq = eq || '=';
     if (obj === null) {
@@ -3411,10 +3411,10 @@ var PIXI = (function (exports) {
     }
 
     if (typeof obj === 'object') {
-      return Object.keys(obj).map(function(k) {
+      return Object.keys(obj).map(function (k) {
         var ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
         if (Array.isArray(obj[k])) {
-          return obj[k].map(function(v) {
+          return obj[k].map(function (v) {
             return ks + encodeURIComponent(stringifyPrimitive(v));
           }).join(sep);
         } else {
@@ -3426,14 +3426,14 @@ var PIXI = (function (exports) {
 
     if (!name) return '';
     return encodeURIComponent(stringifyPrimitive(name)) + eq +
-           encodeURIComponent(stringifyPrimitive(obj));
+      encodeURIComponent(stringifyPrimitive(obj));
   };
 
   var querystring = createCommonjsModule(function (module, exports) {
-  'use strict';
+    'use strict';
 
-  exports.decode = exports.parse = decode;
-  exports.encode = exports.stringify = encode;
+    exports.decode = exports.parse = decode;
+    exports.encode = exports.stringify = encode;
   });
 
   // Copyright Joyent, Inc. and other Node contributors.
@@ -3489,52 +3489,52 @@ var PIXI = (function (exports) {
   // define these here so at least they only have to be
   // compiled once on the first module load.
   var protocolPattern = /^([a-z0-9.+-]+:)/i,
-      portPattern = /:[0-9]*$/,
+    portPattern = /:[0-9]*$/,
 
-      // Special case for a simple path URL
-      simplePathPattern = /^(\/\/?(?!\/)[^\?\s]*)(\?[^\s]*)?$/,
+    // Special case for a simple path URL
+    simplePathPattern = /^(\/\/?(?!\/)[^\?\s]*)(\?[^\s]*)?$/,
 
-      // RFC 2396: characters reserved for delimiting URLs.
-      // We actually just auto-escape these.
-      delims = ['<', '>', '"', '`', ' ', '\r', '\n', '\t'],
+    // RFC 2396: characters reserved for delimiting URLs.
+    // We actually just auto-escape these.
+    delims = ['<', '>', '"', '`', ' ', '\r', '\n', '\t'],
 
-      // RFC 2396: characters not allowed for various reasons.
-      unwise = ['{', '}', '|', '\\', '^', '`'].concat(delims),
+    // RFC 2396: characters not allowed for various reasons.
+    unwise = ['{', '}', '|', '\\', '^', '`'].concat(delims),
 
-      // Allowed by RFCs, but cause of XSS attacks.  Always escape these.
-      autoEscape = ['\''].concat(unwise),
-      // Characters that are never ever allowed in a hostname.
-      // Note that any invalid chars are also handled, but these
-      // are the ones that are *expected* to be seen, so we fast-path
-      // them.
-      nonHostChars = ['%', '/', '?', ';', '#'].concat(autoEscape),
-      hostEndingChars = ['/', '?', '#'],
-      hostnameMaxLen = 255,
-      hostnamePartPattern = /^[+a-z0-9A-Z_-]{0,63}$/,
-      hostnamePartStart = /^([+a-z0-9A-Z_-]{0,63})(.*)$/,
-      // protocols that can allow "unsafe" and "unwise" chars.
-      unsafeProtocol = {
-        'javascript': true,
-        'javascript:': true
-      },
-      // protocols that never have a hostname.
-      hostlessProtocol = {
-        'javascript': true,
-        'javascript:': true
-      },
-      // protocols that always contain a // bit.
-      slashedProtocol = {
-        'http': true,
-        'https': true,
-        'ftp': true,
-        'gopher': true,
-        'file': true,
-        'http:': true,
-        'https:': true,
-        'ftp:': true,
-        'gopher:': true,
-        'file:': true
-      };
+    // Allowed by RFCs, but cause of XSS attacks.  Always escape these.
+    autoEscape = ['\''].concat(unwise),
+    // Characters that are never ever allowed in a hostname.
+    // Note that any invalid chars are also handled, but these
+    // are the ones that are *expected* to be seen, so we fast-path
+    // them.
+    nonHostChars = ['%', '/', '?', ';', '#'].concat(autoEscape),
+    hostEndingChars = ['/', '?', '#'],
+    hostnameMaxLen = 255,
+    hostnamePartPattern = /^[+a-z0-9A-Z_-]{0,63}$/,
+    hostnamePartStart = /^([+a-z0-9A-Z_-]{0,63})(.*)$/,
+    // protocols that can allow "unsafe" and "unwise" chars.
+    unsafeProtocol = {
+      'javascript': true,
+      'javascript:': true
+    },
+    // protocols that never have a hostname.
+    hostlessProtocol = {
+      'javascript': true,
+      'javascript:': true
+    },
+    // protocols that always contain a // bit.
+    slashedProtocol = {
+      'http': true,
+      'https': true,
+      'ftp': true,
+      'gopher': true,
+      'file': true,
+      'http:': true,
+      'https:': true,
+      'ftp:': true,
+      'gopher:': true,
+      'file:': true
+    };
 
   function urlParse(url, parseQueryString, slashesDenoteHost) {
     if (url && util.isObject(url) && url instanceof Url) return url;
@@ -3544,7 +3544,7 @@ var PIXI = (function (exports) {
     return u;
   }
 
-  Url.prototype.parse = function(url, parseQueryString, slashesDenoteHost) {
+  Url.prototype.parse = function (url, parseQueryString, slashesDenoteHost) {
     if (!util.isString(url)) {
       throw new TypeError("Parameter 'url' must be a string, not " + typeof url);
     }
@@ -3553,10 +3553,10 @@ var PIXI = (function (exports) {
     // Back slashes before the query string get converted to forward slashes
     // See: https://code.google.com/p/chromium/issues/detail?id=25916
     var queryIndex = url.indexOf('?'),
-        splitter =
-            (queryIndex !== -1 && queryIndex < url.indexOf('#')) ? '?' : '#',
-        uSplit = url.split(splitter),
-        slashRegex = /\\/g;
+      splitter =
+        (queryIndex !== -1 && queryIndex < url.indexOf('#')) ? '?' : '#',
+      uSplit = url.split(splitter),
+      slashRegex = /\\/g;
     uSplit[0] = uSplit[0].replace(slashRegex, '/');
     url = uSplit.join(splitter);
 
@@ -3609,7 +3609,7 @@ var PIXI = (function (exports) {
     }
 
     if (!hostlessProtocol[proto] &&
-        (slashes || (proto && !slashedProtocol[proto]))) {
+      (slashes || (proto && !slashedProtocol[proto]))) {
 
       // there's a hostname.
       // the first instance of /, ?, ;, or # ends the host.
@@ -3678,7 +3678,7 @@ var PIXI = (function (exports) {
       // if hostname begins with [ and ends with ]
       // assume that it's an IPv6 address.
       var ipv6Hostname = this.hostname[0] === '[' &&
-          this.hostname[this.hostname.length - 1] === ']';
+        this.hostname[this.hostname.length - 1] === ']';
 
       // validate a little.
       if (!ipv6Hostname) {
@@ -3789,7 +3789,7 @@ var PIXI = (function (exports) {
     }
     if (rest) this.pathname = rest;
     if (slashedProtocol[lowerProto] &&
-        this.hostname && !this.pathname) {
+      this.hostname && !this.pathname) {
       this.pathname = '/';
     }
 
@@ -3816,7 +3816,7 @@ var PIXI = (function (exports) {
     return obj.format();
   }
 
-  Url.prototype.format = function() {
+  Url.prototype.format = function () {
     var auth = this.auth || '';
     if (auth) {
       auth = encodeURIComponent(auth);
@@ -3825,25 +3825,25 @@ var PIXI = (function (exports) {
     }
 
     var protocol = this.protocol || '',
-        pathname = this.pathname || '',
-        hash = this.hash || '',
-        host = false,
-        query = '';
+      pathname = this.pathname || '',
+      hash = this.hash || '',
+      host = false,
+      query = '';
 
     if (this.host) {
       host = auth + this.host;
     } else if (this.hostname) {
       host = auth + (this.hostname.indexOf(':') === -1 ?
-          this.hostname :
-          '[' + this.hostname + ']');
+        this.hostname :
+        '[' + this.hostname + ']');
       if (this.port) {
         host += ':' + this.port;
       }
     }
 
     if (this.query &&
-        util.isObject(this.query) &&
-        Object.keys(this.query).length) {
+      util.isObject(this.query) &&
+      Object.keys(this.query).length) {
       query = querystring.stringify(this.query);
     }
 
@@ -3854,7 +3854,7 @@ var PIXI = (function (exports) {
     // only the slashedProtocols get the //.  Not mailto:, xmpp:, etc.
     // unless they had them to begin with.
     if (this.slashes ||
-        (!protocol || slashedProtocol[protocol]) && host !== false) {
+      (!protocol || slashedProtocol[protocol]) && host !== false) {
       host = '//' + (host || '');
       if (pathname && pathname.charAt(0) !== '/') pathname = '/' + pathname;
     } else if (!host) {
@@ -3864,7 +3864,7 @@ var PIXI = (function (exports) {
     if (hash && hash.charAt(0) !== '#') hash = '#' + hash;
     if (search && search.charAt(0) !== '?') search = '?' + search;
 
-    pathname = pathname.replace(/[?#]/g, function(match) {
+    pathname = pathname.replace(/[?#]/g, function (match) {
       return encodeURIComponent(match);
     });
     search = search.replace('#', '%23');
@@ -3876,7 +3876,7 @@ var PIXI = (function (exports) {
     return urlParse(source, false, true).resolve(relative);
   }
 
-  Url.prototype.resolve = function(relative) {
+  Url.prototype.resolve = function (relative) {
     return this.resolveObject(urlParse(relative, false, true)).format();
   };
 
@@ -3885,7 +3885,7 @@ var PIXI = (function (exports) {
     return urlParse(source, false, true).resolveObject(relative);
   }
 
-  Url.prototype.resolveObject = function(relative) {
+  Url.prototype.resolveObject = function (relative) {
     if (util.isString(relative)) {
       var rel = new Url();
       rel.parse(relative, false, true);
@@ -3921,7 +3921,7 @@ var PIXI = (function (exports) {
 
       //urlParse appends trailing / to urls like http://www.example.com
       if (slashedProtocol[result.protocol] &&
-          result.hostname && !result.pathname) {
+        result.hostname && !result.pathname) {
         result.path = result.pathname = '/';
       }
 
@@ -3978,16 +3978,16 @@ var PIXI = (function (exports) {
     }
 
     var isSourceAbs = (result.pathname && result.pathname.charAt(0) === '/'),
-        isRelAbs = (
-            relative.host ||
-            relative.pathname && relative.pathname.charAt(0) === '/'
-        ),
-        mustEndAbs = (isRelAbs || isSourceAbs ||
-                      (result.host && relative.pathname)),
-        removeAllDots = mustEndAbs,
-        srcPath = result.pathname && result.pathname.split('/') || [],
-        relPath = relative.pathname && relative.pathname.split('/') || [],
-        psychotic = result.protocol && !slashedProtocol[result.protocol];
+      isRelAbs = (
+        relative.host ||
+        relative.pathname && relative.pathname.charAt(0) === '/'
+      ),
+      mustEndAbs = (isRelAbs || isSourceAbs ||
+        (result.host && relative.pathname)),
+      removeAllDots = mustEndAbs,
+      srcPath = result.pathname && result.pathname.split('/') || [],
+      relPath = relative.pathname && relative.pathname.split('/') || [],
+      psychotic = result.protocol && !slashedProtocol[result.protocol];
 
     // if the url is a non-slashed url, then relative
     // links like ../.. should be able
@@ -4017,9 +4017,9 @@ var PIXI = (function (exports) {
     if (isRelAbs) {
       // it's absolute.
       result.host = (relative.host || relative.host === '') ?
-                    relative.host : result.host;
+        relative.host : result.host;
       result.hostname = (relative.hostname || relative.hostname === '') ?
-                        relative.hostname : result.hostname;
+        relative.hostname : result.hostname;
       result.search = relative.search;
       result.query = relative.query;
       srcPath = relPath;
@@ -4042,7 +4042,7 @@ var PIXI = (function (exports) {
         //this especially happens in cases like
         //url.resolveObject('mailto:local1@domain1', 'local2@domain2')
         var authInHost = result.host && result.host.indexOf('@') > 0 ?
-                         result.host.split('@') : false;
+          result.host.split('@') : false;
         if (authInHost) {
           result.auth = authInHost.shift();
           result.host = result.hostname = authInHost.shift();
@@ -4053,7 +4053,7 @@ var PIXI = (function (exports) {
       //to support http.request
       if (!util.isNull(result.pathname) || !util.isNull(result.search)) {
         result.path = (result.pathname ? result.pathname : '') +
-                      (result.search ? result.search : '');
+          (result.search ? result.search : '');
       }
       result.href = result.format();
       return result;
@@ -4078,8 +4078,8 @@ var PIXI = (function (exports) {
     // then it must NOT get a trailing slash.
     var last = srcPath.slice(-1)[0];
     var hasTrailingSlash = (
-        (result.host || relative.host || srcPath.length > 1) &&
-        (last === '.' || last === '..') || last === '');
+      (result.host || relative.host || srcPath.length > 1) &&
+      (last === '.' || last === '..') || last === '');
 
     // strip single dots, resolve double dots to parent dir
     // if the path tries to go above the root, `up` ends up > 0
@@ -4105,7 +4105,7 @@ var PIXI = (function (exports) {
     }
 
     if (mustEndAbs && srcPath[0] !== '' &&
-        (!srcPath[0] || srcPath[0].charAt(0) !== '/')) {
+      (!srcPath[0] || srcPath[0].charAt(0) !== '/')) {
       srcPath.unshift('');
     }
 
@@ -4114,17 +4114,17 @@ var PIXI = (function (exports) {
     }
 
     var isAbsolute = srcPath[0] === '' ||
-        (srcPath[0] && srcPath[0].charAt(0) === '/');
+      (srcPath[0] && srcPath[0].charAt(0) === '/');
 
     // put the host back
     if (psychotic) {
       result.hostname = result.host = isAbsolute ? '' :
-                                      srcPath.length ? srcPath.shift() : '';
+        srcPath.length ? srcPath.shift() : '';
       //occationaly the auth can get stuck only in host
       //this especially happens in cases like
       //url.resolveObject('mailto:local1@domain1', 'local2@domain2')
       var authInHost = result.host && result.host.indexOf('@') > 0 ?
-                       result.host.split('@') : false;
+        result.host.split('@') : false;
       if (authInHost) {
         result.auth = authInHost.shift();
         result.host = result.hostname = authInHost.shift();
@@ -4147,7 +4147,7 @@ var PIXI = (function (exports) {
     //to support request.http
     if (!util.isNull(result.pathname) || !util.isNull(result.search)) {
       result.path = (result.pathname ? result.pathname : '') +
-                    (result.search ? result.search : '');
+        (result.search ? result.search : '');
     }
     result.auth = relative.auth || result.auth;
     result.slashes = result.slashes || relative.slashes;
@@ -4155,7 +4155,7 @@ var PIXI = (function (exports) {
     return result;
   };
 
-  Url.prototype.parseHost = function() {
+  Url.prototype.parseHost = function () {
     var host = this.host;
     var port = portPattern.exec(host);
     if (port) {
@@ -4169,11 +4169,11 @@ var PIXI = (function (exports) {
   };
 
   var url$1 = {
-  	parse: parse,
-  	resolve: resolve,
-  	resolveObject: resolveObject,
-  	format: format,
-  	Url: Url_1
+    parse: parse,
+    resolve: resolve,
+    resolveObject: resolveObject,
+    format: format,
+    Url: Url_1
   };
 
   const url = {
@@ -4783,154 +4783,154 @@ Deprecated since v${version}`);
   var yellow = "#ffff00";
   var yellowgreen = "#9acd32";
   var cssColorNames = {
-  	aliceblue: aliceblue,
-  	antiquewhite: antiquewhite,
-  	aqua: aqua,
-  	aquamarine: aquamarine,
-  	azure: azure,
-  	beige: beige,
-  	bisque: bisque,
-  	black: black,
-  	blanchedalmond: blanchedalmond,
-  	blue: blue,
-  	blueviolet: blueviolet,
-  	brown: brown,
-  	burlywood: burlywood,
-  	cadetblue: cadetblue,
-  	chartreuse: chartreuse,
-  	chocolate: chocolate,
-  	coral: coral,
-  	cornflowerblue: cornflowerblue,
-  	cornsilk: cornsilk,
-  	crimson: crimson,
-  	cyan: cyan,
-  	darkblue: darkblue,
-  	darkcyan: darkcyan,
-  	darkgoldenrod: darkgoldenrod,
-  	darkgray: darkgray,
-  	darkgreen: darkgreen,
-  	darkgrey: darkgrey,
-  	darkkhaki: darkkhaki,
-  	darkmagenta: darkmagenta,
-  	darkolivegreen: darkolivegreen,
-  	darkorange: darkorange,
-  	darkorchid: darkorchid,
-  	darkred: darkred,
-  	darksalmon: darksalmon,
-  	darkseagreen: darkseagreen,
-  	darkslateblue: darkslateblue,
-  	darkslategray: darkslategray,
-  	darkslategrey: darkslategrey,
-  	darkturquoise: darkturquoise,
-  	darkviolet: darkviolet,
-  	deeppink: deeppink,
-  	deepskyblue: deepskyblue,
-  	dimgray: dimgray,
-  	dimgrey: dimgrey,
-  	dodgerblue: dodgerblue,
-  	firebrick: firebrick,
-  	floralwhite: floralwhite,
-  	forestgreen: forestgreen,
-  	fuchsia: fuchsia,
-  	gainsboro: gainsboro,
-  	ghostwhite: ghostwhite,
-  	goldenrod: goldenrod,
-  	gold: gold,
-  	gray: gray,
-  	green: green,
-  	greenyellow: greenyellow,
-  	grey: grey,
-  	honeydew: honeydew,
-  	hotpink: hotpink,
-  	indianred: indianred,
-  	indigo: indigo,
-  	ivory: ivory,
-  	khaki: khaki,
-  	lavenderblush: lavenderblush,
-  	lavender: lavender,
-  	lawngreen: lawngreen,
-  	lemonchiffon: lemonchiffon,
-  	lightblue: lightblue,
-  	lightcoral: lightcoral,
-  	lightcyan: lightcyan,
-  	lightgoldenrodyellow: lightgoldenrodyellow,
-  	lightgray: lightgray,
-  	lightgreen: lightgreen,
-  	lightgrey: lightgrey,
-  	lightpink: lightpink,
-  	lightsalmon: lightsalmon,
-  	lightseagreen: lightseagreen,
-  	lightskyblue: lightskyblue,
-  	lightslategray: lightslategray,
-  	lightslategrey: lightslategrey,
-  	lightsteelblue: lightsteelblue,
-  	lightyellow: lightyellow,
-  	lime: lime,
-  	limegreen: limegreen,
-  	linen: linen,
-  	magenta: magenta,
-  	maroon: maroon,
-  	mediumaquamarine: mediumaquamarine,
-  	mediumblue: mediumblue,
-  	mediumorchid: mediumorchid,
-  	mediumpurple: mediumpurple,
-  	mediumseagreen: mediumseagreen,
-  	mediumslateblue: mediumslateblue,
-  	mediumspringgreen: mediumspringgreen,
-  	mediumturquoise: mediumturquoise,
-  	mediumvioletred: mediumvioletred,
-  	midnightblue: midnightblue,
-  	mintcream: mintcream,
-  	mistyrose: mistyrose,
-  	moccasin: moccasin,
-  	navajowhite: navajowhite,
-  	navy: navy,
-  	oldlace: oldlace,
-  	olive: olive,
-  	olivedrab: olivedrab,
-  	orange: orange,
-  	orangered: orangered,
-  	orchid: orchid,
-  	palegoldenrod: palegoldenrod,
-  	palegreen: palegreen,
-  	paleturquoise: paleturquoise,
-  	palevioletred: palevioletred,
-  	papayawhip: papayawhip,
-  	peachpuff: peachpuff,
-  	peru: peru,
-  	pink: pink,
-  	plum: plum,
-  	powderblue: powderblue,
-  	purple: purple,
-  	rebeccapurple: rebeccapurple,
-  	red: red,
-  	rosybrown: rosybrown,
-  	royalblue: royalblue,
-  	saddlebrown: saddlebrown,
-  	salmon: salmon,
-  	sandybrown: sandybrown,
-  	seagreen: seagreen,
-  	seashell: seashell,
-  	sienna: sienna,
-  	silver: silver,
-  	skyblue: skyblue,
-  	slateblue: slateblue,
-  	slategray: slategray,
-  	slategrey: slategrey,
-  	snow: snow,
-  	springgreen: springgreen,
-  	steelblue: steelblue,
-  	tan: tan,
-  	teal: teal,
-  	thistle: thistle,
-  	tomato: tomato,
-  	turquoise: turquoise,
-  	violet: violet,
-  	wheat: wheat,
-  	white: white,
-  	whitesmoke: whitesmoke,
-  	yellow: yellow,
-  	yellowgreen: yellowgreen
+    aliceblue: aliceblue,
+    antiquewhite: antiquewhite,
+    aqua: aqua,
+    aquamarine: aquamarine,
+    azure: azure,
+    beige: beige,
+    bisque: bisque,
+    black: black,
+    blanchedalmond: blanchedalmond,
+    blue: blue,
+    blueviolet: blueviolet,
+    brown: brown,
+    burlywood: burlywood,
+    cadetblue: cadetblue,
+    chartreuse: chartreuse,
+    chocolate: chocolate,
+    coral: coral,
+    cornflowerblue: cornflowerblue,
+    cornsilk: cornsilk,
+    crimson: crimson,
+    cyan: cyan,
+    darkblue: darkblue,
+    darkcyan: darkcyan,
+    darkgoldenrod: darkgoldenrod,
+    darkgray: darkgray,
+    darkgreen: darkgreen,
+    darkgrey: darkgrey,
+    darkkhaki: darkkhaki,
+    darkmagenta: darkmagenta,
+    darkolivegreen: darkolivegreen,
+    darkorange: darkorange,
+    darkorchid: darkorchid,
+    darkred: darkred,
+    darksalmon: darksalmon,
+    darkseagreen: darkseagreen,
+    darkslateblue: darkslateblue,
+    darkslategray: darkslategray,
+    darkslategrey: darkslategrey,
+    darkturquoise: darkturquoise,
+    darkviolet: darkviolet,
+    deeppink: deeppink,
+    deepskyblue: deepskyblue,
+    dimgray: dimgray,
+    dimgrey: dimgrey,
+    dodgerblue: dodgerblue,
+    firebrick: firebrick,
+    floralwhite: floralwhite,
+    forestgreen: forestgreen,
+    fuchsia: fuchsia,
+    gainsboro: gainsboro,
+    ghostwhite: ghostwhite,
+    goldenrod: goldenrod,
+    gold: gold,
+    gray: gray,
+    green: green,
+    greenyellow: greenyellow,
+    grey: grey,
+    honeydew: honeydew,
+    hotpink: hotpink,
+    indianred: indianred,
+    indigo: indigo,
+    ivory: ivory,
+    khaki: khaki,
+    lavenderblush: lavenderblush,
+    lavender: lavender,
+    lawngreen: lawngreen,
+    lemonchiffon: lemonchiffon,
+    lightblue: lightblue,
+    lightcoral: lightcoral,
+    lightcyan: lightcyan,
+    lightgoldenrodyellow: lightgoldenrodyellow,
+    lightgray: lightgray,
+    lightgreen: lightgreen,
+    lightgrey: lightgrey,
+    lightpink: lightpink,
+    lightsalmon: lightsalmon,
+    lightseagreen: lightseagreen,
+    lightskyblue: lightskyblue,
+    lightslategray: lightslategray,
+    lightslategrey: lightslategrey,
+    lightsteelblue: lightsteelblue,
+    lightyellow: lightyellow,
+    lime: lime,
+    limegreen: limegreen,
+    linen: linen,
+    magenta: magenta,
+    maroon: maroon,
+    mediumaquamarine: mediumaquamarine,
+    mediumblue: mediumblue,
+    mediumorchid: mediumorchid,
+    mediumpurple: mediumpurple,
+    mediumseagreen: mediumseagreen,
+    mediumslateblue: mediumslateblue,
+    mediumspringgreen: mediumspringgreen,
+    mediumturquoise: mediumturquoise,
+    mediumvioletred: mediumvioletred,
+    midnightblue: midnightblue,
+    mintcream: mintcream,
+    mistyrose: mistyrose,
+    moccasin: moccasin,
+    navajowhite: navajowhite,
+    navy: navy,
+    oldlace: oldlace,
+    olive: olive,
+    olivedrab: olivedrab,
+    orange: orange,
+    orangered: orangered,
+    orchid: orchid,
+    palegoldenrod: palegoldenrod,
+    palegreen: palegreen,
+    paleturquoise: paleturquoise,
+    palevioletred: palevioletred,
+    papayawhip: papayawhip,
+    peachpuff: peachpuff,
+    peru: peru,
+    pink: pink,
+    plum: plum,
+    powderblue: powderblue,
+    purple: purple,
+    rebeccapurple: rebeccapurple,
+    red: red,
+    rosybrown: rosybrown,
+    royalblue: royalblue,
+    saddlebrown: saddlebrown,
+    salmon: salmon,
+    sandybrown: sandybrown,
+    seagreen: seagreen,
+    seashell: seashell,
+    sienna: sienna,
+    silver: silver,
+    skyblue: skyblue,
+    slateblue: slateblue,
+    slategray: slategray,
+    slategrey: slategrey,
+    snow: snow,
+    springgreen: springgreen,
+    steelblue: steelblue,
+    tan: tan,
+    teal: teal,
+    thistle: thistle,
+    tomato: tomato,
+    turquoise: turquoise,
+    violet: violet,
+    wheat: wheat,
+    white: white,
+    whitesmoke: whitesmoke,
+    yellow: yellow,
+    yellowgreen: yellowgreen
   };
 
   function hex2rgb(hex, out = []) {
