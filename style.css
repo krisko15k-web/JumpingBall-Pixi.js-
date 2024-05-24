@@ -1,16 +1,16 @@
 body {
-    margin: 0;
-    text-align: center;
+  margin: 0;
+  text-align: center;
 }
 
 h1 {
-    position: absolute;
-    height: 150px;
-    width: 200px;
-    color: black;
-    border: 15px solid black;
-    border-radius: 30px;
-    font-size: 120px;
-    margin-top: 50px;
-    margin-left: 50px;
+  position: absolute;
+  height: 150px;
+  width: 200px;
+  color: black;
+  border: 15px solid black;
+  border-radius: 30px;
+  font-size: 120px;
+  margin-top: 50px;
+  margin-left: 50px;
 }
